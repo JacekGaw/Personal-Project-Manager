@@ -1,4 +1,4 @@
-import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
+import {forwardRef, useImperativeHandle, useRef, useState} from 'react';
 
 const SignUpForm = forwardRef(function SignUpForm(props, ref) {
     const [error, setError] = useState('');
