@@ -5,14 +5,14 @@ import ProtectedRoute from "../../components/ProtectedRoute";
 import Account from "../Account/account";
 import Dashboard from "./Dashboard";
 
-const DashboardRoutes = ({ children }) => {
+const DashboardRoutes = () => {
   return (
     <section className="w-full relative flex">
       <Nav />
-      <div className="min-h-screen flex-auto ml-64">
+      <div className="min-h-screen flex-auto ml-48">
         <Routes>
           <Route path="/" element={<Dashboard />}/>
-          <Route path="/dashboard/account" element={<Account />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
       </div>
     </section>

@@ -17,7 +17,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route
+            <Route exact
               path="/dashboard/*"
               element={
                 <ProtectedRoute>
