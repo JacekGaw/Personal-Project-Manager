@@ -9,6 +9,10 @@ const SignInForm = forwardRef(function SignInForm(props, ref) {
         return {
             getLoginData(){
                 return {email: emailRef.current.value, password: passwordRef.current.value};
+            },
+            clearInputs(){
+                emailRef.current.value = '';
+                passwordRef.current.value = '';
             }
         }
     }, []);

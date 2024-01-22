@@ -1,28 +1,28 @@
-import React, {useContext} from 'react';
-import { AuthContext } from '../../store/auth-context';
-import { useNavigate } from 'react-router-dom';
-
+import React, { useContext } from "react";
+import { AuthContext } from "../../store/auth-context";
+import { useNavigate } from "react-router-dom";
 
 const Account = () => {
-    const {user, logout} = useContext(AuthContext);
-    const navigate = useNavigate();
-    console.log(user)
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  console.log(user);
 
-    const handleLogOut = async () => {
-        try {
-            await logout();
-            navigate("/signin");
-        }
-        catch (e) {
-            console.log(e.message);
-        }
+  const handleLogOut = async () => {
+    try {
+      await logout();
+      navigate("/signin");
+    } catch (e) {
+      console.log(e.message);
     }
+  };
 
-    return (<>
-        <h1>Account page</h1>
-        <button onClick={handleLogOut}>Log out</button>
-        </>
-    );
-}
+  return (
+    <section>
+        
+      <h1>Account page</h1>
+      <button onClick={handleLogOut}>Log out</button>
+    </section>
+  );
+};
 
 export default Account;

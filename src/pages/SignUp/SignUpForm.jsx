@@ -13,6 +13,11 @@ const SignUpForm = forwardRef(function SignUpForm(props, ref) {
                     return {email: emailRef.current.value, password: passwordRef.current.value};
                 else 
                     setError("Passwords do not match!");
+            },
+            clearInputs() {
+                emailRef.current.value = '';
+                passwordRef.current.value = '';
+                repeatPasswordRef.current.value = '';
             }
         }
     }, []);
