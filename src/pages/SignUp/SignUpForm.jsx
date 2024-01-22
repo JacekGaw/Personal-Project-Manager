@@ -19,17 +19,19 @@ const SignUpForm = forwardRef(function SignUpForm(props, ref) {
 
     return (
         <>
-            <div>
-            <label htmlFor="email">E-mail:</label>
-            <input type="mail" id="email" ref={emailRef} required/>
+            <div className='flex flex-col mb-2'>
+            <label htmlFor="email" className='text-sm text-slate-500'>E-mail:</label>
+            <input type="mail" id="email" ref={emailRef} className='shadow-sm border border-lightjeans hover:border-darkjeans transition-all duration-200 rounded-md p-2 text-sm text-darkjeans' required/>
             </div>
-            <div>
-            <label htmlFor="password">Password:</label>
-            <input type="password" id="password" ref={passwordRef} required />
-            <label htmlFor="password-repeat">Repeat password:</label>
-            <input type="password" id="password-repeat" ref={repeatPasswordRef} required />
+            <div className='flex flex-col mb-2'>
+            <label htmlFor="password" className='text-sm text-slate-500'>Password:</label>
+            <input type="password" id="password" className='shadow-sm border border-lightjeans hover:border-darkjeans transition-all duration-200  rounded-md p-2 text-sm text-darkjeans' ref={passwordRef} required />
+            </div>
+            <div className='flex flex-col mb-2'>
+            <label htmlFor="password-repeat" className='text-sm text-slate-500'>Repeat password:</label>
+            <input type="password" id="password-repeat" className='shadow-sm border hover:border-darkjeans transition-all duration-200 border-lightjeans rounded-md p-2 text-sm text-darkjeans' ref={repeatPasswordRef} required />
+            </div>
             <p>{error}</p>
-            </div>
         </>
     )
     

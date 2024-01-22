@@ -12,11 +12,8 @@ function App() {
       <AuthContextProvider>
       <main>
         <Routes>
-
-            
           {/* <Route path="*" element={}/> */}
           <Route path="/" element={<Home />}/>
-          {/* <Route path='/' element={} /> */}
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />

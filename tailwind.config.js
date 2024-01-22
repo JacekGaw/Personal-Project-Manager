@@ -13,7 +13,7 @@ export default {
         darkjeans: "#243a52",
         darkerjeans: "#111d28",
         dustgold: "#f1af61",
-        gold: "#ff9900",
+        vibrantgold: "#ff9900",
         jeans: "#4974a5",
         lightcream: "#f3e5e1",
         lightjeans: "#b2c4d9",
