@@ -8,7 +8,8 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { db, auth } from "../firebase";
+import { setDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 
 export const AuthContext = createContext({
   user: {},
@@ -25,7 +26,20 @@ const AuthContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const signUp = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then(async () => {
+        console.log(user);
+        await setDoc(doc(db, "users", user.uid), {
+          userID: user.uid,
+          name: user.displayName,
+          email: user.email,
+          createdAt: user.metadata.creationTime,
+          projectsIDs: [],
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const signIn = (email, password) => {
@@ -36,12 +50,26 @@ const AuthContextProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  const updateDisplayName = (dislpayName) => {
-    return updateProfile(user, { displayName: dislpayName });
+  const updateDisplayName = (dislplayName) => {
+    return updateProfile(user, { displayName: dislplayName })
+      .then(async () => {
+        await updateDoc(doc(db, "users", user.uid), {
+          name: dislplayName,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const deleteCurrUser = () => {
-    return deleteUser(user);
+    return deleteUser(user)
+      .then(async () => {
+        await deleteDoc(doc(db, "users", user.uid));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const updateUsersPassword = (newPassword) => {
@@ -50,7 +78,7 @@ const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log(currentUser);
+      // console.log(currentUser);
       setUser(currentUser);
       setLoading(false);
     });
