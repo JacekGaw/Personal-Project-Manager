@@ -27,13 +27,13 @@ const AuthContextProvider = ({ children }) => {
 
   const signUp = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password)
-      .then(async () => {
-        console.log(user);
-        await setDoc(doc(db, "users", user.uid), {
-          userID: user.uid,
-          name: user.displayName,
-          email: user.email,
-          createdAt: user.metadata.creationTime,
+      .then(async (userCredidencial) => {
+        console.log(userCredidencial);
+        await setDoc(doc(db, "users", userCredidencial.user.uid), {
+          userID: userCredidencial.user.uid,
+          name: userCredidencial.user.displayName,
+          email: userCredidencial.user.email,
+          createdAt: userCredidencial.user.metadata.creationTime,
           projectsIDs: [],
         });
       })
@@ -52,8 +52,8 @@ const AuthContextProvider = ({ children }) => {
 
   const updateDisplayName = (dislplayName) => {
     return updateProfile(user, { displayName: dislplayName })
-      .then(async () => {
-        await updateDoc(doc(db, "users", user.uid), {
+      .then(async (userCredidencial) => {
+        await updateDoc(doc(db, "users", userCredidencial.user.uid), {
           name: dislplayName,
         });
       })
@@ -64,8 +64,8 @@ const AuthContextProvider = ({ children }) => {
 
   const deleteCurrUser = () => {
     return deleteUser(user)
-      .then(async () => {
-        await deleteDoc(doc(db, "users", user.uid));
+      .then(async (userCredidencial) => {
+        await deleteDoc(doc(db, "users", userCredidencial.user.uid));
       })
       .catch((error) => {
         console.log(error);
