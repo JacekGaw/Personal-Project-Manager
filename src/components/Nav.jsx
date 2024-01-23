@@ -14,11 +14,11 @@ const Nav = () => {
       </h2>
       <ul className="h-screen flex flex-col gap-2 pl-2 text-slate-200 font-[300] w-full">
         <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
-          <NavLink exact to="/dashboard" className={({isActive}) =>
+          <NavLink exact="true" to="/dashboard" end className={({isActive}) =>
           isActive ? "block w-full py-2 px-2 bg-jeans rounded-l-md" : "block w-full py-2 px-2"}>Dashboard</NavLink>
         </li>
         <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
-          <NavLink exact to="/dashboard/account" className={({isActive}) =>
+          <NavLink exact="true" end to="/dashboard/account" className={({isActive}) =>
           isActive ? "block w-full py-2 px-2 bg-jeans rounded-l-md" : "block w-full py-2 px-2"}>Account</NavLink>
           
         </li>
