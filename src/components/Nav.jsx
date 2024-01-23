@@ -23,7 +23,7 @@ const Nav = () => {
           
         </li>
       </ul>
-      <Button >Log Out</Button>
+      <Button onClick={() => {logout()}} >Log Out</Button>
     </nav>
   );
 };

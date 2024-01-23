@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/UI/Button"
 
 const SignUp = () => {
-  const { user, signUp } = useContext(AuthContext);
+  const { user, signUp, registerUserInDatabase } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const loginInfo = useRef();
   const navigate = useNavigate();
