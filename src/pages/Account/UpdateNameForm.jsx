@@ -9,6 +9,7 @@ const UpdateNameForm = () => {
   const { user, updateDisplayName } = useContext(AuthContext);
 
   const handleUpdateUserName = async (e) => {
+    e.preventDefault();
     setErrorMessage();
     console.log(newUserNameRef.current.value, user.displayName);
     if (newUserNameRef.current.value !== "") {
@@ -22,6 +23,7 @@ const UpdateNameForm = () => {
         }
         newUserNameRef.current.value = "";
         setButtonDisabled(false);
+        location.reload();
       }
       else {
         e.preventDefault();

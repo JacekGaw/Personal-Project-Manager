@@ -35,12 +35,14 @@ const AuthContextProvider = ({ children }) => {
           email: userCredidencial.user.email,
           createdAt: userCredidencial.user.metadata.creationTime,
           projectsIDs: [],
-        });
+        })
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+
 
   const signIn = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
@@ -51,26 +53,33 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const updateDisplayName = (dislplayName) => {
+    updateDisplayNameInDB(dislplayName);
     return updateProfile(user, { displayName: dislplayName })
-      .then(async (userCredidencial) => {
-        await updateDoc(doc(db, "users", userCredidencial.user.uid), {
-          name: dislplayName,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
-  const deleteCurrUser = () => {
-    return deleteUser(user)
-      .then(async (userCredidencial) => {
-        await deleteDoc(doc(db, "users", userCredidencial.user.uid));
-      })
-      .catch((error) => {
-        console.log(error);
+  const updateDisplayNameInDB = async (dislplayName) => {
+    console.log(user);
+    try {
+      await updateDoc(doc(db, "users", user.uid), {
+        name: dislplayName
       });
+    }
+    catch (error) {console.log(error);}
+  }
+
+  const deleteCurrUser = () => {
+    deleteUserFromDB();
+    return deleteUser(user);
   };
+
+  const deleteUserFromDB = async () => {
+    try {
+    await deleteDoc(doc(db, "users", user.uid));
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
 
   const updateUsersPassword = (newPassword) => {
     return updatePassword(user, newPassword);
@@ -78,7 +87,7 @@ const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      // console.log(currentUser);
+
       setUser(currentUser);
       setLoading(false);
     });

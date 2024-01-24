@@ -39,16 +39,16 @@ const ChangePasswordForm = () => {
       {errorMessage && <p className="mx-10 my-2 text-red-600 text-center text-lg border-2 border-red-600 font-[800]">{errorMessage} <button className="text-black font-[900]" onClick={() => {setErrorMessage()}}>x</button></p>}
       <form onSubmit={handleChangePassword} className="flex flex-col gap-2 justify-center items-center">
         <div>
-        <label htmlFor="new-user-name" className='font-[600] text-slate-700 text-sm mr-2'>
+        <label htmlFor="new-password" className='font-[600] text-slate-700 text-sm mr-2'>
           New Password:
         </label>
-        <input id="new-user-name" type="password" ref={newPasswordRef} className="mr-2 bg-slate-100 border text-sm border-lightjeans rounded-md p-1"></input>
+        <input id="new-password" type="password" ref={newPasswordRef} className="mr-2 bg-slate-100 border text-sm border-lightjeans rounded-md p-1"></input>
         </div>
         <div>
-        <label htmlFor="new-user-name" className='font-[600] text-slate-700 text-sm mr-2'>
+        <label htmlFor="repeat-new-password" className='font-[600] text-slate-700 text-sm mr-2'>
           Repeat New Password:
         </label>
-        <input id="new-user-name" type="password" ref={newRepeatedPasswordRef} className="mr-2 bg-slate-100 border text-sm border-lightjeans rounded-md p-1"></input>
+        <input id="repeat-new-password" type="password" ref={newRepeatedPasswordRef} className="mr-2 bg-slate-100 border text-sm border-lightjeans rounded-md p-1"></input>
         </div>
         <Button
           disabled={buttonDisabled}
