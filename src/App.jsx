@@ -1,6 +1,6 @@
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
-import Account from "./pages/Account/account";
+import Account from "./pages/Account/Account";
 import DashboardRoutes from "./pages/Dashboard/DashboardRoutes";
 import Home from "./pages/Home/Home";
 import { Route, Routes } from "react-router-dom";
