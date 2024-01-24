@@ -20,7 +20,10 @@ const Nav = () => {
         <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
           <NavLink exact="true" end to="/dashboard/account" className={({isActive}) =>
           isActive ? "block w-full py-2 px-2 bg-jeans rounded-l-md" : "block w-full py-2 px-2"}>Account</NavLink>
-          
+        </li>
+        <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
+          <NavLink exact="true" end to="/dashboard/projects" className={({isActive}) =>
+          isActive ? "block w-full py-2 px-2 bg-jeans rounded-l-md" : "block w-full py-2 px-2"}>Projects</NavLink>
         </li>
       </ul>
       <Button onClick={() => {logout()}} >Log Out</Button>

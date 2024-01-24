@@ -2,8 +2,9 @@ import React from "react";
 import Nav from "../../components/Nav";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "../../components/ProtectedRoute";
-import Account from "../Account/account";
+import Account from "../Account/Account";
 import Dashboard from "./Dashboard";
+import Projects from "../Projects/Projects";
 
 const DashboardRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const DashboardRoutes = () => {
         <Routes>
           <Route path="/" element={<Dashboard />}/>
           <Route path="/account" element={<Account />} />
+          <Route path="/projects" element={<Projects />} />
         </Routes>
       </div>
     </section>
