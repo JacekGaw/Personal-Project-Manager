@@ -4,7 +4,8 @@ import { db, auth } from "../firebase";
 import { collection, query, where, getDocs, doc } from "firebase/firestore";
 
 export const ProjectsContext = createContext({
-  
+  projects: [],
+  loadProjects: () => {},
 });
 
 const ProjectsContextProvider = ({ children }) => {
@@ -15,24 +16,27 @@ const ProjectsContextProvider = ({ children }) => {
   //create function that loads users docs, extract code from useEffect below and trigger 
   //that function in useEffect on mount in dashboard component
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setCurrentLoggedUser(currentUser);
-      const projectsFirebase = collection(db, "ProjectsCollection");
+  const loadProjects = async () => {
+    const projectsFirebase = collection(db, "ProjectsCollection");
       const q = query(
         projectsFirebase,
-        where("authorID", "==", currentUser.uid)
+        where("authorID", "==", currentLoggedUser.uid)
       );
-      const querySnapshot = await getDocs(q);
+      const querySnapshot =await getDocs(q);
       let arr = [];
       if (querySnapshot) {
         querySnapshot.forEach((doc) => {
-          console.log(doc.data());
           arr = [...arr, doc.data()];
         });
       }
-      console.log(arr);
       setProjects(arr);
+  }
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setCurrentLoggedUser(currentUser);
+      
+      
       setLoading(false);
     });
 
@@ -41,7 +45,10 @@ const ProjectsContextProvider = ({ children }) => {
     };
   }, []);
 
-  const ctxValue = {};
+  const ctxValue = {
+    projects: projects,
+    loadProjects: loadProjects,
+  };
 
   return (
     <ProjectsContext.Provider value={ctxValue}>
