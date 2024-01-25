@@ -16,7 +16,7 @@ const ProjectsList = () => {
         {projects.map((project, index) => {
           return (
             <ProjectListItem
-              key={index}
+              key={project.id}
               arrayIndex={index}
               projectInfo={project}
             ></ProjectListItem>

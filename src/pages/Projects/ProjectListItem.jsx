@@ -1,20 +1,25 @@
 import React from "react";
 import Button from "../../components/UI/Button";
+import { Timestamp } from "firebase/firestore";
+import { decodeTimestamp } from "../../helpers/decodeTimestamp";
 
 const ProjectListItem = ({ projectInfo, arrayIndex }) => {
+
+  
+
   return (
     <li className="group w-full rounded-md bg-white p-5 flex justify-between drop-shadow-sm hover:drop-shadow-md transition-all duration-200">
       <header>
         <h5 className=" font-[600] text-slate-800 text-md">
-          {arrayIndex + 1}. {projectInfo.Title}
+          {projectInfo.Title}
         </h5>
         <div className="flex gap-2">
           <p className="text-xs font-[300] text-slate-700">
-            Created: {new Date(projectInfo.created.seconds).toISOString()}
+            Created: {decodeTimestamp(projectInfo.created).toLocaleDateString()}
           </p>
           <p className="text-xs font-[300] text-slate-700">
             Planned End Date:{" "}
-            {new Date(projectInfo.plannedEndDate.seconds).toISOString()}
+            {decodeTimestamp(projectInfo.plannedEndDate).toLocaleDateString()}
           </p>
         </div>
       </header>

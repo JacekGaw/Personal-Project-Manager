@@ -47,12 +47,12 @@ const ProjectsContextProvider = ({ children }) => {
     }
   };
 
-  const addProject = async (title, description, plannedEndDate) => {
+  const addProject = async (title, description, plannedEndDate, todos) => {
     console.log("Event to firebase occured");
     const projectData = {
       Title: title,
       Description: description,
-      Todos: [],
+      Todos: todos,
       authorID: currentLoggedUser.uid,
       created: Timestamp.fromDate(new Date()),
       plannedEndDate: Timestamp.fromDate(new Date(plannedEndDate)),

@@ -5,7 +5,9 @@ import { ProjectsContext } from "../../store/projects-context.jsx";
 
 const AddProjectForm = ({ onAddProject }) => {
   const [errorMessage, setErrorMessage] = useState();
+  const [todosArr, setTodosArr] = useState([]);
   const titleRef = useRef();
+  const todoRef = useRef();
   const descriptionRef = useRef();
   const plannedEndDateRef = useRef();
   const { addProject } = useContext(ProjectsContext);
@@ -22,7 +24,8 @@ const AddProjectForm = ({ onAddProject }) => {
         await addProject(
           titleRef.current.value,
           descriptionRef.current.value,
-          plannedEndDateRef.current.value
+          plannedEndDateRef.current.value,
+          todosArr
         );
         await onAddProject();
       } catch (e) {
@@ -32,9 +35,29 @@ const AddProjectForm = ({ onAddProject }) => {
       titleRef.current.value = "";
       descriptionRef.current.value = "";
       plannedEndDateRef.current.value = "";
+      setTodosArr([]);
+      todoRef.current.value = "";
     } else {
       setErrorMessage("Project Planned End Date must be in the future!");
     }
+  };
+
+  const handleAddTodo = (e) => {
+    e.preventDefault();
+    if (todoRef.current.value !== "") {
+      setTodosArr((prevTodos) => {
+        return [...prevTodos, todoRef.current.value];
+      });
+    }
+  };
+
+  const handleClearInputs = (e) => {
+    e.preventDefault();
+    titleRef.current.value = "";
+    descriptionRef.current.value = "";
+    plannedEndDateRef.current.value = "";
+    todoRef.current.value = "";
+    setTodosArr([]);
   };
 
   return (
@@ -94,6 +117,39 @@ const AddProjectForm = ({ onAddProject }) => {
             required
           />
         </div>
+        <div className="flex flex-col gap-1 ">
+          <header>
+            <h5 className="text-center text-sm font-[600]">
+              Add ToDo to project:
+            </h5>
+          </header>
+          <div className="w-full flex gap-2 justify-center">
+            <input
+              id="todo-input"
+              className="shadow-sm border border-lightjeans hover:border-darkjeans transition-all duration-200 rounded-md p-2 text-sm text-darkjeans"
+              placeholder="ToDo"
+              ref={todoRef}
+            />
+            <Button className={`bg-vibrantgold`} onClick={handleAddTodo}>
+              Add Todo
+            </Button>
+          </div>
+          <ul>
+            {todosArr.map((todo, index) => {
+              return (
+                <li key={index} className="text-xs font-[400] ">
+                  {index + 1}. {todo}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <button
+          className="block text-xs border-b border-slate-400 hover:border-lightjeans"
+          onClick={handleClearInputs}
+        >
+          Clear inputs
+        </button>
         <Button type="submit">Add</Button>
       </form>
     </div>
