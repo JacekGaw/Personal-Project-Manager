@@ -11,9 +11,11 @@ const Projects = () => {
         modalRef.current.open();
     }
 
+    const handleAddProject = () => {modalRef.current.close()};
+
   return (
     <>
-    <Modal ref={modalRef}><AddProjectForm /></Modal>
+    <Modal ref={modalRef}><AddProjectForm onAddProject={handleAddProject}/></Modal>
     <section className="w-full p-5">
       <header>
         <h1 className="p-5 text-center font-bold text-3xl">Projects</h1>
