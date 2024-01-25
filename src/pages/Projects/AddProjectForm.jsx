@@ -5,6 +5,7 @@ import { ProjectsContext } from "../../store/projects-context.jsx";
 
 const AddProjectForm = ({ onAddProject }) => {
   const [errorMessage, setErrorMessage] = useState();
+  const [disabled, setDisabled] = useState(false);
   const [todosArr, setTodosArr] = useState([]);
   const titleRef = useRef();
   const todoRef = useRef();
@@ -21,6 +22,7 @@ const AddProjectForm = ({ onAddProject }) => {
     );
     if (pickedDate === 0 || pickedDate === 1) {
       try {
+        setDisabled(true);
         await addProject(
           titleRef.current.value,
           descriptionRef.current.value,
@@ -37,6 +39,7 @@ const AddProjectForm = ({ onAddProject }) => {
       plannedEndDateRef.current.value = "";
       setTodosArr([]);
       todoRef.current.value = "";
+      setDisabled(false);
     } else {
       setErrorMessage("Project Planned End Date must be in the future!");
     }
@@ -130,7 +133,7 @@ const AddProjectForm = ({ onAddProject }) => {
               placeholder="ToDo"
               ref={todoRef}
             />
-            <Button className={`bg-vibrantgold`} onClick={handleAddTodo}>
+            <Button className={`bg-vibrantgold disabled:bg-dustgold`} disabled={disabled} onClick={handleAddTodo}>
               Add Todo
             </Button>
           </div>
@@ -146,11 +149,12 @@ const AddProjectForm = ({ onAddProject }) => {
         </div>
         <button
           className="block text-xs border-b border-slate-400 hover:border-lightjeans"
+          disabled={disabled}
           onClick={handleClearInputs}
         >
           Clear inputs
         </button>
-        <Button type="submit">Add</Button>
+        <Button type="submit" disabled={disabled} className={`disabled:bg-lightjeans`}>Add</Button>
       </form>
     </div>
   );

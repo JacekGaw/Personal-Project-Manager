@@ -6,17 +6,17 @@ import {
   query,
   where,
   getDocs,
-  addDoc,
   doc,
   Timestamp,
   setDoc,
-  serverTimestamp,
+  deleteDoc
 } from "firebase/firestore";
 
 export const ProjectsContext = createContext({
   projects: [],
   loadProjects: () => {},
   addProject: () => {},
+  deleteProject: () => {},
 });
 
 const ProjectsContextProvider = ({ children }) => {
@@ -24,8 +24,6 @@ const ProjectsContextProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  //create function that loads users docs, extract code from useEffect below and trigger
-  //that function in useEffect on mount in dashboard component
 
   const loadProjects = async (currentUser) => {
     if (currentUser !== null) {
@@ -47,7 +45,7 @@ const ProjectsContextProvider = ({ children }) => {
     }
   };
 
-  const addProject = async (title, description, plannedEndDate, todos) => {
+  const addProject = (title, description, plannedEndDate, todos) => {
     console.log("Event to firebase occured");
     const projectData = {
       Title: title,
@@ -56,14 +54,10 @@ const ProjectsContextProvider = ({ children }) => {
       authorID: currentLoggedUser.uid,
       created: Timestamp.fromDate(new Date()),
       plannedEndDate: Timestamp.fromDate(new Date(plannedEndDate)),
+      active: true
     };
-    // return await addDoc(collection(db, "ProjectsCollection"), projectData).then(() => {
-    //   setProjects((prevStatus) => {
-    //     return [...prevStatus, projectData];
-    //   });
-    // }, err => console.log(err));
-    const newProjectRef = await doc(collection(db, "ProjectsCollection"));
-    return await setDoc(newProjectRef, projectData).then(
+    const newProjectRef = doc(collection(db, "ProjectsCollection"));
+    return setDoc(newProjectRef, projectData).then(
       () => {
         setProjects((prevStatus) => {
           return [...prevStatus, {id:newProjectRef.id, ...projectData}];
@@ -72,6 +66,14 @@ const ProjectsContextProvider = ({ children }) => {
       (err) => console.log(err)
     );
   };
+
+  const deleteProject = (projectID) => {
+    return deleteDoc(doc(db, "ProjectsCollection", projectID)).then(() => {
+      const arr = projects.filter(project => project.id !== projectID);
+      console.log(arr);
+      setProjects(arr);
+    }, (err) => console.log(err));
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -91,6 +93,7 @@ const ProjectsContextProvider = ({ children }) => {
     projects: projects,
     loadProjects: loadProjects,
     addProject: addProject,
+    deleteProject: deleteProject,
   };
 
   return (
