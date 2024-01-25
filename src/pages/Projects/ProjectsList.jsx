@@ -3,7 +3,7 @@ import { ProjectsContext } from "../../store/projects-context";
 import ProjectListItem from "./ProjectListItem";
 
 const ProjectsList = () => {
-  const { projects } = useContext(ProjectsContext);
+  const { projects, currentLoggedUser } = useContext(ProjectsContext);
 
   console.log(projects);
 

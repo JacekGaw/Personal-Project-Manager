@@ -26,6 +26,8 @@ const AuthContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const signUp = (email, password) => {
+    console.log("Event to firebase occured");
+
     return createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredidencial) => {
         console.log(userCredidencial);
@@ -46,13 +48,19 @@ const AuthContextProvider = ({ children }) => {
 
   const signIn = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
+    console.log("Event to firebase occured");
+
   };
 
   const logout = () => {
+    console.log("Event to firebase occured");
+
     return signOut(auth);
   };
 
   const updateDisplayName = (dislplayName) => {
+    console.log("Event to firebase occured");
+
     updateDisplayNameInDB(dislplayName);
     return updateProfile(user, { displayName: dislplayName })
   };
@@ -60,6 +68,8 @@ const AuthContextProvider = ({ children }) => {
   const updateDisplayNameInDB = async (dislplayName) => {
     console.log(user);
     try {
+      console.log("Event to firebase occured");
+
       await updateDoc(doc(db, "users", user.uid), {
         name: dislplayName
       });
@@ -68,12 +78,14 @@ const AuthContextProvider = ({ children }) => {
   }
 
   const deleteCurrUser = () => {
+    console.log("Event to firebase occured");
     deleteUserFromDB();
     return deleteUser(user);
   };
 
   const deleteUserFromDB = async () => {
     try {
+      console.log("Event to firebase occured");
     await deleteDoc(doc(db, "users", user.uid));
     }
     catch (error) {
@@ -82,11 +94,14 @@ const AuthContextProvider = ({ children }) => {
   }
 
   const updateUsersPassword = (newPassword) => {
+    console.log("Event to firebase occured");
+
     return updatePassword(user, newPassword);
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("Event to firebase occured");
 
       setUser(currentUser);
       setLoading(false);
