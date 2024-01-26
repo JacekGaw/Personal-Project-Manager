@@ -10,6 +10,7 @@ import {
   Timestamp,
   setDoc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 export const ProjectsContext = createContext({
@@ -19,6 +20,7 @@ export const ProjectsContext = createContext({
   addProject: () => {},
   deleteProject: () => {},
   getSingleProjectInfo: () => {},
+  deleteTodo: () => {},
 });
 
 const ProjectsContextProvider = ({ children }) => {
@@ -84,6 +86,18 @@ const ProjectsContextProvider = ({ children }) => {
     );
   };
 
+  // add to function: also update the projects state 
+  const deleteTodo = (projectID, todoIndex) => {
+    const project = projects.filter((project) => project.id === projectID)[0];
+    console.log(project.Todos[todoIndex]);
+    const newTodos = project.Todos;
+    newTodos.splice(todoIndex, 1);
+    const projectRef = doc(db, "ProjectsCollection", projectID);
+    return updateDoc(projectRef, {
+      Todos: newTodos
+    });
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       console.log("Event to firebase occured");
@@ -104,6 +118,7 @@ const ProjectsContextProvider = ({ children }) => {
     addProject: addProject,
     deleteProject: deleteProject,
     getSingleProjectInfo: getSingleProjectInfo,
+    deleteTodo: deleteTodo,
   };
 
   return (
