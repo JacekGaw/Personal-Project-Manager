@@ -9,21 +9,22 @@ import {
   doc,
   Timestamp,
   setDoc,
-  deleteDoc
+  deleteDoc,
 } from "firebase/firestore";
 
 export const ProjectsContext = createContext({
+  currentLoggedUser: {},
   projects: [],
   loadProjects: () => {},
   addProject: () => {},
   deleteProject: () => {},
+  getSingleProjectInfo: () => {},
 });
 
 const ProjectsContextProvider = ({ children }) => {
   const [currentLoggedUser, setCurrentLoggedUser] = useState();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-
 
   const loadProjects = async (currentUser) => {
     if (currentUser !== null) {
@@ -54,26 +55,34 @@ const ProjectsContextProvider = ({ children }) => {
       authorID: currentLoggedUser.uid,
       created: Timestamp.fromDate(new Date()),
       plannedEndDate: Timestamp.fromDate(new Date(plannedEndDate)),
-      active: true
+      active: true,
     };
     const newProjectRef = doc(collection(db, "ProjectsCollection"));
     return setDoc(newProjectRef, projectData).then(
       () => {
         setProjects((prevStatus) => {
-          return [...prevStatus, {id:newProjectRef.id, ...projectData}];
+          return [...prevStatus, { id: newProjectRef.id, ...projectData }];
         });
       },
       (err) => console.log(err)
     );
   };
 
+  const getSingleProjectInfo = (projectIDfromParam) => {
+    const givenReturn = projects.filter((project) => project.id === projectIDfromParam)[0];
+    return givenReturn;
+  };
+
   const deleteProject = (projectID) => {
-    return deleteDoc(doc(db, "ProjectsCollection", projectID)).then(() => {
-      const arr = projects.filter(project => project.id !== projectID);
-      console.log(arr);
-      setProjects(arr);
-    }, (err) => console.log(err));
-  }
+    return deleteDoc(doc(db, "ProjectsCollection", projectID)).then(
+      () => {
+        const arr = projects.filter((project) => project.id !== projectID);
+        console.log(arr);
+        setProjects(arr);
+      },
+      (err) => console.log(err)
+    );
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -94,6 +103,7 @@ const ProjectsContextProvider = ({ children }) => {
     loadProjects: loadProjects,
     addProject: addProject,
     deleteProject: deleteProject,
+    getSingleProjectInfo: getSingleProjectInfo,
   };
 
   return (

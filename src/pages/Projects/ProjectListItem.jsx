@@ -3,6 +3,7 @@ import Button from "../../components/UI/Button";
 import { decodeTimestamp } from "../../helpers/decodeTimestamp";
 import Modal from "../../components/UI/Modal";
 import { ProjectsContext } from "../../store/projects-context";
+import { Link } from "react-router-dom";
 
 const ProjectListItem = ({ projectInfo, arrayIndex }) => {
   const {deleteProject} = useContext(ProjectsContext);
@@ -51,9 +52,9 @@ const ProjectListItem = ({ projectInfo, arrayIndex }) => {
       </header>
       <div className="flex gap-2">
         <div className="flex ">
-        <button className=" flex justify-center items-center">
+        <Link to={`/dashboard/projects/${projectInfo.id}`} className=" flex justify-center items-center">
           <span className="material-symbols-outlined text-2xl opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">arrow_right_alt</span>
-        </button>
+        </Link>
         <button className=" flex justify-center items-center">
           <span className="material-symbols-outlined text-2xl opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" onClick={handleClickDelete} >delete</span>
         </button>

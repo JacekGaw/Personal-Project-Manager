@@ -6,6 +6,7 @@ import Account from "../Account/Account";
 import Dashboard from "./Dashboard";
 import Projects from "../Projects/Projects";
 import ProjectsContextProvider from "../../store/projects-context";
+import ProjectView from "../Projects/ProjectView";
 
 const DashboardRoutes = () => {
   return (
@@ -17,7 +18,8 @@ const DashboardRoutes = () => {
         <Routes>
           <Route path="/" element={<Dashboard />}/>
           <Route path="/account" element={<Account />} />
-          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/*" element={<Projects />} />
+          <Route path="/projects/:projectIDparam" element={<ProjectView />} />
         </Routes>
       </div>
     </section>
