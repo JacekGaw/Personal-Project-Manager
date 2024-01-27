@@ -21,6 +21,8 @@ export const ProjectsContext = createContext({
   deleteProject: () => {},
   getSingleProjectInfo: () => {},
   deleteTodo: () => {},
+  addTodo: () => {},
+  changeStatus: () => {},
 });
 
 const ProjectsContextProvider = ({ children }) => {
@@ -105,6 +107,43 @@ const ProjectsContextProvider = ({ children }) => {
     }, err => {console.log(err);});
   }
 
+  const changeStatus = (projectID, todoIndex, newStatus) => {
+    const project = projects.filter((project) => project.id === projectID)[0];
+    const newTodos = project.Todos;
+    newTodos[todoIndex] = {todo: newTodos[todoIndex].todo, status: newStatus};
+    const projectRef = doc(db, "ProjectsCollection", projectID);
+    return updateDoc(projectRef, {
+      Todos: newTodos
+    }).then(() => {
+      setProjects((prevState) => {
+        const project = projects.filter((project) => project.id === projectID)[0];
+        return [
+          ...prevState,
+          project.Todos = newTodos
+        ]
+      })
+    }, err => {console.log(err);});
+  }
+
+  const addTodo = (projectID, newTodo) => {
+    const project = projects.filter((project) => project.id === projectID)[0];
+    let newTodos = project.Todos;
+    newTodos = [...newTodos, {todo: newTodo, status: "active"}];
+    const projectRef = doc(db, "ProjectsCollection", projectID);
+
+    return updateDoc(projectRef, {
+      Todos: newTodos
+    }).then(() => {
+      setProjects((prevState) => {
+        const project = projects.filter((project) => project.id === projectID)[0];
+        return [
+          ...prevState,
+          project.Todos = newTodos
+        ]
+      })
+    }, err => {console.log(err);});
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       console.log("Event to firebase occured");
@@ -126,6 +165,8 @@ const ProjectsContextProvider = ({ children }) => {
     deleteProject: deleteProject,
     getSingleProjectInfo: getSingleProjectInfo,
     deleteTodo: deleteTodo,
+    addTodo: addTodo,
+    changeStatus: changeStatus,
   };
 
   return (

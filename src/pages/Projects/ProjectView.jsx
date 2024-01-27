@@ -3,12 +3,13 @@ import { ProjectsContext } from "../../store/projects-context";
 import { Link, useParams } from "react-router-dom";
 import { decodeTimestamp } from "../../helpers/decodeTimestamp";
 import ProjectViewTodos from "./ProjectViewTodos";
+import Button from "../../components/UI/Button";
 
 const ProjectView = () => {
+
   const { projectIDparam } = useParams();
   const { projects, getSingleProjectInfo } = useContext(ProjectsContext);
   const [project, setProject] = useState();
-  let projectTest = {};
 
   useEffect(() => {
     const fetch = async () => {
