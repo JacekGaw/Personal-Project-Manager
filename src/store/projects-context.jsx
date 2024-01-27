@@ -86,16 +86,23 @@ const ProjectsContextProvider = ({ children }) => {
     );
   };
 
-  // add to function: also update the projects state 
+
   const deleteTodo = (projectID, todoIndex) => {
     const project = projects.filter((project) => project.id === projectID)[0];
-    console.log(project.Todos[todoIndex]);
     const newTodos = project.Todos;
     newTodos.splice(todoIndex, 1);
     const projectRef = doc(db, "ProjectsCollection", projectID);
     return updateDoc(projectRef, {
       Todos: newTodos
-    });
+    }).then(() => {
+      setProjects((prevState) => {
+        const project = projects.filter((project) => project.id === projectID)[0];
+        return [
+          ...prevState,
+          project.Todos = newTodos
+        ]
+      })
+    }, err => {console.log(err);});
   }
 
   useEffect(() => {

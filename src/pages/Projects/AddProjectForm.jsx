@@ -49,7 +49,7 @@ const AddProjectForm = ({ onAddProject }) => {
     e.preventDefault();
     if (todoRef.current.value !== "") {
       setTodosArr((prevTodos) => {
-        return [...prevTodos, todoRef.current.value];
+        return [...prevTodos, {todo: todoRef.current.value, status: "active"}];
       });
     }
   };
@@ -141,7 +141,7 @@ const AddProjectForm = ({ onAddProject }) => {
             {todosArr.map((todo, index) => {
               return (
                 <li key={index} className="text-xs font-[400] ">
-                  {index + 1}. {todo}
+                  {index + 1}. {todo.todo}
                 </li>
               );
             })}
