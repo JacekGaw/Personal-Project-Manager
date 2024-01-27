@@ -89,9 +89,10 @@ const ProjectsContextProvider = ({ children }) => {
   };
 
 
-  const deleteTodo = (projectID, todoIndex) => {
+  const deleteTodo = (projectID, todoID) => {
     const project = projects.filter((project) => project.id === projectID)[0];
     const newTodos = project.Todos;
+    const todoIndex = newTodos.map(e => e.id).indexOf(todoID);
     newTodos.splice(todoIndex, 1);
     const projectRef = doc(db, "ProjectsCollection", projectID);
     return updateDoc(projectRef, {
@@ -106,11 +107,12 @@ const ProjectsContextProvider = ({ children }) => {
       })
     }, err => {console.log(err);});
   }
-
-  const changeStatus = (projectID, todoIndex, newStatus) => {
+// TODO: merge functions which deal with todos collection
+  const changeStatus = (projectID, todoID, newStatus) => {
     const project = projects.filter((project) => project.id === projectID)[0];
     const newTodos = project.Todos;
-    newTodos[todoIndex] = {todo: newTodos[todoIndex].todo, status: newStatus};
+    const todoIndex = newTodos.map(e => e.id).indexOf(todoID);
+    newTodos[todoIndex] = {id: Math.random(), todo: newTodos[todoIndex].todo, status: newStatus};
     const projectRef = doc(db, "ProjectsCollection", projectID);
     return updateDoc(projectRef, {
       Todos: newTodos
@@ -128,7 +130,7 @@ const ProjectsContextProvider = ({ children }) => {
   const addTodo = (projectID, newTodo) => {
     const project = projects.filter((project) => project.id === projectID)[0];
     let newTodos = project.Todos;
-    newTodos = [...newTodos, {todo: newTodo, status: "active"}];
+    newTodos = [...newTodos, {id: Math.random(), todo: newTodo, status: "active"}];
     const projectRef = doc(db, "ProjectsCollection", projectID);
 
     return updateDoc(projectRef, {

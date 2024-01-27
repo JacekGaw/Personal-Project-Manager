@@ -49,7 +49,7 @@ const AddProjectForm = ({ onAddProject }) => {
     e.preventDefault();
     if (todoRef.current.value !== "") {
       setTodosArr((prevTodos) => {
-        return [...prevTodos, {todo: todoRef.current.value, status: "active"}];
+        return [...prevTodos, {id: Math.random(), todo: todoRef.current.value, status: "active"}];
       });
     }
   };

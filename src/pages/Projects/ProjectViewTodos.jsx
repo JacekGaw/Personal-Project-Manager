@@ -9,6 +9,7 @@ const ProjectViewTodos = (todos) => {
   const { projectIDparam } = useParams();
   const {deleteTodo, addTodo, changeStatus} = useContext(ProjectsContext);
 
+
     const countWithStatus = (status) => {
         const arr = todos.todos.filter(todo => todo.status === status);
         return arr.length;
@@ -33,9 +34,9 @@ const ProjectViewTodos = (todos) => {
       setNewTodoInputVisibility(false);
     };
 
-    const handleChangeStatus = async (index, status) => {
+    const handleChangeStatus = async (todoID, status) => {
       try {
-        await changeStatus(projectIDparam, index, status);
+        await changeStatus(projectIDparam, todoID, status);
       } catch (err) {console.log(err);}
     }
 
@@ -66,12 +67,12 @@ const ProjectViewTodos = (todos) => {
                 </p>
                 <div className="flex gap-1">
                 <button className="group-hover:opacity-100 group-hover:translate-x-0 -translate-x-1 opacity-0 transition-all duration-200 flex justify-center items-center hover:translate-y-[2px]">
-                  <span className="material-symbols-outlined text-[20px]" onClick={() => handleChangeStatus(index, "urgent")}>local_fire_department</span>
+                  <span className="material-symbols-outlined text-[20px]" onClick={() => handleChangeStatus(todo.id, todo.status == "urgent" ? "active" : "urgent")}>local_fire_department</span>
                 </button>
                 <button className="group-hover:opacity-100 group-hover:translate-x-0 -translate-x-1 opacity-0 transition-all duration-200 flex justify-center items-center hover:translate-y-[2px]">
-                  <span className="material-symbols-outlined text-[20px]" onClick={() => handleChangeStatus(index, "done")}>check_circle</span>
+                  <span className="material-symbols-outlined text-[20px]" onClick={() => handleChangeStatus(todo.id, todo.status == "done" ? "active" : "done")}>check_circle</span>
                 </button>
-                <button className="group-hover:opacity-100 group-hover:translate-x-0 -translate-x-1 opacity-0 transition-all duration-200 flex justify-center items-center hover:translate-y-[2px]" onClick={() => handleDeleteTodo(index)}>
+                <button className="group-hover:opacity-100 group-hover:translate-x-0 -translate-x-1 opacity-0 transition-all duration-200 flex justify-center items-center hover:translate-y-[2px]" onClick={() => handleDeleteTodo(todo.id)}>
                   <span className="material-symbols-outlined text-[20px]">delete</span>
                 </button>
                 </div>
