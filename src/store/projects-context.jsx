@@ -24,6 +24,7 @@ export const ProjectsContext = createContext({
   addTodo: () => {},
   changeStatus: () => {},
   changeDescription: () => {},
+  changeEndDate: () => {},
 });
 
 const ProjectsContextProvider = ({ children }) => {
@@ -188,6 +189,26 @@ const ProjectsContextProvider = ({ children }) => {
         console.log(err);
       }
     );
+  };
+
+  const changeEndDate = (projectID, newDate) => {
+    const projectRef = doc(db, "ProjectsCollection", projectID);
+    return updateDoc(projectRef, {
+      plannedEndDate: Timestamp.fromDate(new Date(newDate)),
+    }).then(
+      () => {
+        setProjects((prevState) => {
+          return prevState.map((project) => {
+            if (project.id === projectID)
+              return { ...project, plannedEndDate: Timestamp.fromDate(new Date(newDate)) };
+            else return project;
+          });
+        });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   useEffect(() => {
@@ -214,6 +235,7 @@ const ProjectsContextProvider = ({ children }) => {
     addTodo: addTodo,
     changeStatus: changeStatus,
     changeDescription: changeDescription,
+    changeEndDate: changeEndDate,
   };
 
   return (
