@@ -23,6 +23,7 @@ export const ProjectsContext = createContext({
   deleteTodo: () => {},
   addTodo: () => {},
   changeStatus: () => {},
+  changeDescription: () => {},
 });
 
 const ProjectsContextProvider = ({ children }) => {
@@ -73,7 +74,9 @@ const ProjectsContextProvider = ({ children }) => {
   };
 
   const getSingleProjectInfo = (projectIDfromParam) => {
-    const givenReturn = projects.filter((project) => project.id === projectIDfromParam)[0];
+    const givenReturn = projects.filter(
+      (project) => project.id === projectIDfromParam
+    )[0];
     return givenReturn;
   };
 
@@ -88,62 +91,103 @@ const ProjectsContextProvider = ({ children }) => {
     );
   };
 
-
   const deleteTodo = (projectID, todoID) => {
     const project = projects.filter((project) => project.id === projectID)[0];
     const newTodos = project.Todos;
-    const todoIndex = newTodos.map(e => e.id).indexOf(todoID);
+    const todoIndex = newTodos.map((e) => e.id).indexOf(todoID);
     newTodos.splice(todoIndex, 1);
     const projectRef = doc(db, "ProjectsCollection", projectID);
     return updateDoc(projectRef, {
-      Todos: newTodos
-    }).then(() => {
-      setProjects((prevState) => {
-        const project = projects.filter((project) => project.id === projectID)[0];
-        return [
-          ...prevState,
-          project.Todos = newTodos
-        ]
-      })
-    }, err => {console.log(err);});
-  }
-// TODO: merge functions which deal with todos collection
+      Todos: newTodos,
+    }).then(
+      () => {
+        setProjects((prevState) => {
+          return prevState.map((project) => {
+            if (project.id === projectID)
+              return { ...project, Todos: newTodos };
+            else return project;
+          });
+        });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  };
+  // TODO: merge functions which deal with todos collection
   const changeStatus = (projectID, todoID, newStatus) => {
     const project = projects.filter((project) => project.id === projectID)[0];
     const newTodos = project.Todos;
-    const todoIndex = newTodos.map(e => e.id).indexOf(todoID);
-    newTodos[todoIndex] = {id: Math.random(), todo: newTodos[todoIndex].todo, status: newStatus};
+    const todoIndex = newTodos.map((e) => e.id).indexOf(todoID);
+    newTodos[todoIndex] = {
+      id: Math.random(),
+      todo: newTodos[todoIndex].todo,
+      status: newStatus,
+    };
     const projectRef = doc(db, "ProjectsCollection", projectID);
     return updateDoc(projectRef, {
-      Todos: newTodos
-    }).then(() => {
-      setProjects((prevState) => {
-        const project = projects.filter((project) => project.id === projectID)[0];
-        return [
-          ...prevState,
-          project.Todos = newTodos
-        ]
-      })
-    }, err => {console.log(err);});
-  }
+      Todos: newTodos,
+    }).then(
+      () => {
+        setProjects((prevState) => {
+          return prevState.map((project) => {
+            if (project.id === projectID)
+              return { ...project, Todos: newTodos };
+            else return project;
+          });
+        });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  };
 
   const addTodo = (projectID, newTodo) => {
     const project = projects.filter((project) => project.id === projectID)[0];
     let newTodos = project.Todos;
-    newTodos = [...newTodos, {id: Math.random(), todo: newTodo, status: "active"}];
+    newTodos = [
+      ...newTodos,
+      { id: Math.random(), todo: newTodo, status: "active" },
+    ];
     const projectRef = doc(db, "ProjectsCollection", projectID);
 
     return updateDoc(projectRef, {
-      Todos: newTodos
-    }).then(() => {
-      setProjects((prevState) => {
-        const project = projects.filter((project) => project.id === projectID)[0];
-        return [
-          ...prevState,
-          project.Todos = newTodos
-        ]
-      })
-    }, err => {console.log(err);});
+      Todos: newTodos,
+    }).then(
+      () => {
+        setProjects((prevState) => {
+          return prevState.map((project) => {
+            if (project.id === projectID)
+              return { ...project, Todos: newTodos };
+            else return project;
+          });
+        });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  };
+
+  const changeDescription = (projectID, newDesc) => {
+    const projectRef = doc(db, "ProjectsCollection", projectID);
+    return updateDoc(projectRef, {
+      Description: newDesc,
+    }).then(
+      () => {
+        setProjects((prevState) => {
+          return prevState.map((project) => {
+            if (project.id === projectID)
+              return { ...project, Description: newDesc, };
+            else return project;
+          });
+        });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   useEffect(() => {
@@ -169,6 +213,7 @@ const ProjectsContextProvider = ({ children }) => {
     deleteTodo: deleteTodo,
     addTodo: addTodo,
     changeStatus: changeStatus,
+    changeDescription: changeDescription,
   };
 
   return (

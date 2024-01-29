@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { ProjectsContext } from "../../store/projects-context";
 import { Link, useParams } from "react-router-dom";
 import { decodeTimestamp } from "../../helpers/decodeTimestamp";
@@ -6,10 +6,11 @@ import ProjectViewTodos from "./ProjectViewTodos";
 import Button from "../../components/UI/Button";
 
 const ProjectView = () => {
-
+  const newDescRef = useRef();
   const { projectIDparam } = useParams();
-  const { projects, getSingleProjectInfo } = useContext(ProjectsContext);
+  const { projects, getSingleProjectInfo, changeDescription } = useContext(ProjectsContext);
   const [project, setProject] = useState();
+  const [editDesc, setEditDesc] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
@@ -21,6 +22,19 @@ const ProjectView = () => {
     };
     fetch();
   }, [projects]);
+
+  const handleClickChangeDesc = () => {
+    setEditDesc(prevState => {return !prevState});
+  };
+
+  const handleChangeDesc = async () => {
+    try {
+      await changeDescription(projectIDparam, newDescRef.current.value);
+    } catch (err) {
+      console.log(err);
+    }
+    setEditDesc(false);
+  };
 
   return (
     <>
@@ -56,20 +70,29 @@ const ProjectView = () => {
             </div>
           </div>
           <div className="p-5 flex flex-col gap-2 lg:flex-row lg:justify-between">
-          <div className="w-full lg:w-1/2">
-            <h3 className="font-[700] text-md text-darkjeans">
-              Project Description:
-            </h3>
-            <p className="text-md text-justify font-[300] p-2">
-              {project && project.Description}
-            </p>
-          </div>
-          <div className="w-full lg:w-1/2">
-          <h3 className="font-[700] text-md text-darkjeans">
-              To Do:
-            </h3>
-          {project && <ProjectViewTodos todos={project.Todos}/>}
-          </div>
+            <div className="w-full lg:w-1/2">
+              <div className="flex items-center gap-2">
+                <h3 className="font-[700] text-md text-darkjeans">
+                  Project Description:
+                </h3>
+                <button
+                  className="flex justify-center items-center"
+                  onClick={handleClickChangeDesc}
+                >
+                  <span className="material-symbols-outlined text-[18px] hover:-translate-y-[2px] transition-all duration-200">
+                    {editDesc ? "close" : "edit"}
+                  </span>
+                </button>
+              </div>
+              {!editDesc ? <p className="text-md text-justify font-[300] p-2">
+                {project && project.Description}
+              </p> : <div><textarea className="text-xs p-1 w-full border border-lightjeans rounded-sm hover:border-darkjeans transition-all duration-200" rows="5" type="text" ref={newDescRef} defaultValue={project.Description} /><Button onClick={handleChangeDesc}>Change</Button></div>}
+              
+            </div>
+            <div className="w-full lg:w-1/2">
+              <h3 className="font-[700] text-md text-darkjeans">To Do:</h3>
+              {project && <ProjectViewTodos todos={project.Todos} />}
+            </div>
           </div>
         </section>
       </section>

@@ -5,8 +5,6 @@ import ProjectListItem from "./ProjectListItem";
 const ProjectsList = () => {
   const { projects, currentLoggedUser } = useContext(ProjectsContext);
 
-  console.log(projects);
-
   return (
     <section>
       <div className="mx-5 mt-5 border-b border-b-lightjeans py-1">
