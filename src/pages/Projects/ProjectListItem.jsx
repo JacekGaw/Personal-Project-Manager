@@ -4,6 +4,7 @@ import { decodeTimestamp } from "../../helpers/decodeTimestamp";
 import Modal from "../../components/UI/Modal";
 import { Link } from "react-router-dom";
 import { countDaysLeft } from "../../helpers/countDaysLeft";
+import ProgressBar from "./ProgressBar";
 
 const ProjectListItem = ({ projectInfo }) => {
   const [disabled, setDisabled] = useState(false);
@@ -11,7 +12,7 @@ const ProjectListItem = ({ projectInfo }) => {
 
   return (
     <>
-      <li className="group w-full rounded-md bg-white p-5 flex justify-between drop-shadow-sm hover:drop-shadow-md transition-all duration-200">
+      <li className="relative group w-full rounded-md bg-white p-5 flex justify-between drop-shadow-sm hover:drop-shadow-md transition-all duration-200">
         <header>
           <h5 className=" font-[600] text-slate-800 text-md">
             {projectInfo.Title}
@@ -53,6 +54,7 @@ const ProjectListItem = ({ projectInfo }) => {
             </Link>
           </div>
         </div>
+        <ProgressBar todos={projectInfo.Todos} />
       </li>
     </>
   );
