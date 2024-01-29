@@ -22,9 +22,10 @@ export const ProjectsContext = createContext({
   getSingleProjectInfo: () => {},
   deleteTodo: () => {},
   addTodo: () => {},
-  changeStatus: () => {},
+  changeTodoStatus: () => {},
   changeDescription: () => {},
   changeEndDate: () => {},
+  changeProjectStatus: () => {},
 });
 
 const ProjectsContextProvider = ({ children }) => {
@@ -61,7 +62,7 @@ const ProjectsContextProvider = ({ children }) => {
       authorID: currentLoggedUser.uid,
       created: Timestamp.fromDate(new Date()),
       plannedEndDate: Timestamp.fromDate(new Date(plannedEndDate)),
-      active: true,
+      status: "active"
     };
     const newProjectRef = doc(collection(db, "ProjectsCollection"));
     return setDoc(newProjectRef, projectData).then(
@@ -116,7 +117,7 @@ const ProjectsContextProvider = ({ children }) => {
     );
   };
   // TODO: merge functions which deal with todos collection
-  const changeStatus = (projectID, todoID, newStatus) => {
+  const changeTodoStatus = (projectID, todoID, newStatus) => {
     const project = projects.filter((project) => project.id === projectID)[0];
     const newTodos = project.Todos;
     const todoIndex = newTodos.map((e) => e.id).indexOf(todoID);
@@ -211,6 +212,26 @@ const ProjectsContextProvider = ({ children }) => {
     );
   }
 
+  const changeProjectStatus = (projectID, newStatus) => {
+    const projectRef = doc(db, "ProjectsCollection", projectID);
+    return updateDoc(projectRef, {
+      status: newStatus
+    }).then(
+      () => {
+        setProjects((prevState) => {
+          return prevState.map((project) => {
+            if (project.id === projectID)
+              return { ...project, status: newStatus };
+            else return project;
+          });
+        });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       console.log("Event to firebase occured");
@@ -233,9 +254,10 @@ const ProjectsContextProvider = ({ children }) => {
     getSingleProjectInfo: getSingleProjectInfo,
     deleteTodo: deleteTodo,
     addTodo: addTodo,
-    changeStatus: changeStatus,
+    changeTodoStatus: changeTodoStatus,
     changeDescription: changeDescription,
     changeEndDate: changeEndDate,
+    changeProjectStatus: changeProjectStatus,
   };
 
   return (

@@ -3,12 +3,12 @@ import { ProjectsContext } from "../../store/projects-context";
 import { useParams } from "react-router-dom";
 
 const ProjectViewTodosItem = ({ todo, index }) => {
-  const { changeStatus, deleteTodo } = useContext(ProjectsContext);
+  const { changeTodoStatus, deleteTodo } = useContext(ProjectsContext);
   const { projectIDparam } = useParams();
 
   const handleChangeStatus = async (todoID, status) => {
     try {
-      await changeStatus(projectIDparam, todoID, status);
+      await changeTodoStatus(projectIDparam, todoID, status);
     } catch (err) {
       console.log(err);
     }
