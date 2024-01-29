@@ -42,11 +42,11 @@ const ProjectListItem = ({ projectInfo, arrayIndex }) => {
         </h5>
         <div className="flex gap-2">
           <p className="text-xs font-[300] text-slate-700">
-            Created: {decodeTimestamp(projectInfo.created).toLocaleDateString()}
+            Created: {projectInfo && decodeTimestamp(projectInfo.created).toLocaleDateString()}
           </p>
           <p className="text-xs font-[300] text-slate-700">
             Planned End Date:{" "}
-            {decodeTimestamp(projectInfo.plannedEndDate).toLocaleDateString()}
+            {projectInfo && decodeTimestamp(projectInfo.plannedEndDate).toLocaleDateString()}
           </p>
         </div>
       </header>
