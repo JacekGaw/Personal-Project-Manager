@@ -5,6 +5,7 @@ import UpdateNameForm from "./UpdateNameForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 import { AuthContext } from "../../store/auth-context";
 import { useNavigate } from "react-router-dom";
+import UpdateAvatar from "./UpdateAvatar";
 
 const Account = () => {
   const { logout, deleteCurrUser } = useContext(AuthContext);
@@ -48,6 +49,7 @@ const Account = () => {
         </p>
       )}
       <AccountInfo />
+      <UpdateAvatar />
       <UpdateNameForm />
       <ChangePasswordForm />
       <Button onClick={handleLogOut}>Log out</Button>

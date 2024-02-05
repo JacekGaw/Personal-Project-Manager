@@ -1,14 +1,9 @@
-import React, { useRef, useState } from "react";
-import Button from "../../components/UI/Button";
+import React from "react";
 import { decodeTimestamp } from "../../helpers/decodeTimestamp";
-import Modal from "../../components/UI/Modal";
 import { Link } from "react-router-dom";
 import { countDaysLeft } from "../../helpers/countDaysLeft";
-import ProgressBar from "./ProgressBar";
 
 const ProjectListItem = ({ projectInfo }) => {
-  const [disabled, setDisabled] = useState(false);
-  const modalRef = useRef();
 
   return (
     <>
@@ -54,7 +49,6 @@ const ProjectListItem = ({ projectInfo }) => {
             </Link>
           </div>
         </div>
-        <ProgressBar todos={projectInfo.Todos} />
       </li>
     </>
   );
