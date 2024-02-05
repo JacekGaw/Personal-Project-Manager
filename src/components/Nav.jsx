@@ -14,19 +14,65 @@ const Nav = () => {
       </h2>
       <ul className="h-screen flex flex-col gap-2 pl-2 text-slate-200 font-[300] w-full">
         <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
-          <NavLink exact="true" to="/dashboard" end className={({isActive}) =>
-          isActive ? "block w-full py-2 px-2 bg-jeans rounded-l-md" : "block w-full py-2 px-2"}>Dashboard</NavLink>
+          <NavLink
+            exact="true"
+            to="/dashboard"
+            end
+            className={({ isActive }) =>
+              isActive
+                ? "block w-full py-2 px-2 bg-jeans rounded-l-md"
+                : "block w-full py-2 px-2"
+            }
+          >
+            Dashboard
+          </NavLink>
         </li>
         <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
-          <NavLink exact="true" end to="/dashboard/account" className={({isActive}) =>
-          isActive ? "block w-full py-2 px-2 bg-jeans rounded-l-md" : "block w-full py-2 px-2"}>Account</NavLink>
+          <NavLink
+            exact="true"
+            end
+            to="/dashboard/account"
+            className={({ isActive }) =>
+              isActive
+                ? "block w-full py-2 px-2 bg-jeans rounded-l-md"
+                : "block w-full py-2 px-2"
+            }
+          >
+            Account
+          </NavLink>
         </li>
         <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
-          <NavLink   to="/dashboard/projects" className={({isActive}) =>
-          isActive ? "block w-full py-2 px-2 bg-jeans rounded-l-md" : "block w-full py-2 px-2"}>Projects</NavLink>
+          <NavLink
+            to="/dashboard/projects"
+            className={({ isActive }) =>
+              isActive
+                ? "block w-full py-2 px-2 bg-jeans rounded-l-md"
+                : "block w-full py-2 px-2"
+            }
+          >
+            Projects
+          </NavLink>
+        </li>
+        <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
+          <NavLink
+            to="/dashboard/notes"
+            className={({ isActive }) =>
+              isActive
+                ? "block w-full py-2 px-2 bg-jeans rounded-l-md"
+                : "block w-full py-2 px-2"
+            }
+          >
+            Notes
+          </NavLink>
         </li>
       </ul>
-      <Button onClick={() => {logout()}} >Log Out</Button>
+      <Button
+        onClick={() => {
+          logout();
+        }}
+      >
+        Log Out
+      </Button>
     </nav>
   );
 };
