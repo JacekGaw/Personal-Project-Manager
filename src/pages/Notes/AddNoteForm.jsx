@@ -1,4 +1,4 @@
-import React, {useContext ,useRef} from "react";
+import React, {useContext ,useRef, useState} from "react";
 import Button from "../../components/UI/Button";
 import { ProjectsContext } from "../../store/projects-context";
 import { NotesContext } from "../../store/notes-context";
@@ -9,13 +9,19 @@ const AddNoteForm = ({ onAddProject }) => {
     const assignRef = useRef();
     const {projects} = useContext(ProjectsContext);
     const {addNote} = useContext(NotesContext);
+    const [disabled, setDisabled] = useState(false)
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+        setDisabled(true);
         await addNote(titleRef.current.value, noteRef.current.value, assignRef.current.value);
-    } catch (err) { console.log(err); }
+        setDisabled(false);
+      } catch (err) { console.log(err); }
+    titleRef.current.value = "";
+    noteRef.current.value = "";
+    assignRef.current.value = "";
   };
 
   return (
@@ -68,7 +74,7 @@ const AddNoteForm = ({ onAddProject }) => {
             })}
           </select>
         </div>
-        <Button type="submit">Add Note</Button>
+        <Button type="submit" disabled={disabled}>Add Note</Button>
       </form>
     </>
   );

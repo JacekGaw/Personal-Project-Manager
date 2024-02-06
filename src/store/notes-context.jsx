@@ -48,7 +48,7 @@ const NotesContextProvider = ({ children }) => {
       assign: assign,
       authorID: currentLoggedUser.uid,
       created: Timestamp.fromDate(new Date()),
-
+      files: [],
     };
     const newNoteRef = doc(collection(db, "NotesCollection"));
     return setDoc(newNoteRef, noteData).then(
