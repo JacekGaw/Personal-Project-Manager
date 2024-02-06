@@ -23,7 +23,13 @@ const firebaseConfig = {
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGINGSENDERID,
   appId: import.meta.env.VITE_FIREBASE_APPID,
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENTID
-
+  // apiKey: "AIzaSyDsuwZp0PW8Y-Shhlo7xOCdQ1w2XCtxqkE",
+  // authDomain: "project-manager-10c79.firebaseapp.com",
+  // projectId: "project-manager-10c79",
+  // storageBucket: "project-manager-10c79.appspot.com",
+  // messagingSenderId: "438765228634",
+  // appId: "1:438765228634:web:5424ccb5230a7d48fbfe63",
+  // measurementId: "G-LNC1FS82W7"
   
 };
 

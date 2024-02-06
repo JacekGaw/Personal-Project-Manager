@@ -11,12 +11,14 @@ import {
   setDoc,
   deleteDoc,
   updateDoc,
+  orderBy,
 } from "firebase/firestore";
 
 export const NotesContext = createContext({
   currentLoggedUser: {},
   notes: [],
   addNote: () => {},
+  deleteNote: () => {},
 });
 
 const NotesContextProvider = ({ children }) => {
@@ -28,7 +30,7 @@ const NotesContextProvider = ({ children }) => {
     if (currentUser !== null) {
       console.log("Event to firebase occured");
       const notesFirebase = collection(db, "NotesCollection");
-      const q = query(notesFirebase, where("authorID", "==", currentUser.uid));
+      const q = query(notesFirebase, where("authorID", "==", currentUser.uid), orderBy("created", "desc"));
       const querySnapshot = await getDocs(q);
       let arr = [];
       if (querySnapshot) {
@@ -61,6 +63,16 @@ const NotesContextProvider = ({ children }) => {
     );
   };
 
+  const deleteNote = (noteID) => {
+    return deleteDoc(doc(db, "NotesCollection", noteID)).then(
+      () => {
+        const arr = notes.filter((note) => note.id !== noteID);
+        setNotes(arr);
+      },
+      (err) => console.log(err)
+    );
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       console.log("Event to firebase occured");
@@ -78,6 +90,7 @@ const NotesContextProvider = ({ children }) => {
     currentLoggedUser: currentLoggedUser,
     notes: notes,
     addNote: addNote,
+    deleteNote: deleteNote,
   };
 
   return (

@@ -22,6 +22,7 @@ const AddNoteForm = ({ onAddProject }) => {
     titleRef.current.value = "";
     noteRef.current.value = "";
     assignRef.current.value = "";
+    onAddProject();
   };
 
   return (
