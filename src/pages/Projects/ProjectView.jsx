@@ -8,6 +8,7 @@ import { compareDates } from "../../helpers/compareDates";
 import { countDaysLeft } from "../../helpers/countDaysLeft";
 import Modal from "../../components/UI/Modal";
 import { useNavigate } from "react-router-dom";
+import ProjectNotes from "./ProjectNotes";
 
 const ProjectView = () => {
   const navigate = useNavigate();
@@ -275,7 +276,9 @@ const ProjectView = () => {
               <h3 className="font-[700] text-md text-darkjeans">To Do:</h3>
               {project && <ProjectViewTodos todos={project.Todos} />}
             </div>
+            
           </div>
+          <ProjectNotes projectID={project && project.id} />
         </section>
       </section>
     </>

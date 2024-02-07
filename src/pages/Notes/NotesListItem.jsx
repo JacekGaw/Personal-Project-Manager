@@ -2,11 +2,12 @@ import React, { useRef, useState, useEffect, useContext } from "react";
 import { decodeTimestamp } from "../../helpers/decodeTimestamp";
 import { NotesContext } from "../../store/notes-context";
 import Modal from "../../components/UI/Modal";
-import Button from "../../components/UI/Button";
 import NoteInfo from "./NoteInfo";
+import AddNoteForm from "./AddNoteForm";
+import AddNoteFile from "./AddNoteFile";
 
 const NotesListItem = ({ note, index }) => {
-  const {deleteNote} = useContext(NotesContext);
+  const { deleteNote } = useContext(NotesContext);
   const modalRef = useRef();
   const [disabled, setDisabled] = useState(false);
   const [height, setHeight] = useState(0);
@@ -16,10 +17,10 @@ const NotesListItem = ({ note, index }) => {
 
   useEffect(() => {
     setHeight(textElement.current.clientHeight);
-    if (textElement.current.clientHeight > 64) {
+    if (textElement.current.clientHeight > 80) {
       moreElement.current.style.visibility = "visible";
     }
-    textElement.current.style.height = "60px";
+    textElement.current.style.height = "80px";
   }, [textElement, moreElement]);
 
   const handleDeleteNote = async () => {
@@ -27,17 +28,36 @@ const NotesListItem = ({ note, index }) => {
       setDisabled(true);
       await deleteNote(note.id);
       setDisabled(false);
-    } catch (err) { console.log(err); }
-  }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleGetMore = () => {
     modalRef.current.open();
     setModalOutput(<NoteInfo note={note} onDelete={handleDeleteNote} />);
+  };
+
+  const handleCloseModal = () => {
+    modalRef.current.close();
+  };
+
+  const handleEditNote = (noteInfo) => {
+    modalRef.current.open();
+    setModalOutput(
+      <AddNoteForm onAddProject={handleCloseModal} noteEdit={noteInfo} />
+    );
+  };
+
+  const handleAddFile = (noteID) => {
+    modalRef.current.open();
+    setModalOutput(<AddNoteFile onAddFile={handleCloseModal} noteID={noteID} />)
   }
 
   return (
-    <><Modal ref={modalRef}>{modalOutput}</Modal>
-      <li className="relative  w-full h-fit rounded-md bg-white p-5 flex flex-col justify-between drop-shadow-sm hover:drop-shadow-md transition-all duration-200">
+    <>
+      <Modal ref={modalRef}>{modalOutput}</Modal>
+      <li className="relative group w-full h-fit rounded-md bg-white p-5 flex flex-col justify-between drop-shadow-sm hover:drop-shadow-md transition-all duration-200">
         <header className="flex justify-between items-start">
           <h3 className="text-md font-[800]">
             <span>{index}.</span> {note.title}
@@ -47,11 +67,24 @@ const NotesListItem = ({ note, index }) => {
               more_vert
             </span>
             <div className=" p-1 bg-white rounded-full absolute hidden gap-1 group-hover:flex right-[100%] top-0 ">
-              <button className="material-symbols-outlined flex justify-center items-center text-[18px]" disabled={disabled} onClick={handleDeleteNote}>
+              <button
+                className="material-symbols-outlined flex justify-center items-center text-[18px]"
+                disabled={disabled}
+                onClick={handleDeleteNote}
+              >
                 delete
               </button>
-              <button className="material-symbols-outlined flex justify-center items-center text-[18px]">
+              <button
+                className="material-symbols-outlined flex justify-center items-center text-[18px]"
+                onClick={() => handleEditNote(note)}
+              >
                 edit
+              </button>
+              <button
+                className="material-symbols-outlined flex justify-center items-center text-[18px]"
+                onClick={() => handleAddFile(note.id)}
+              >
+                attach_file_add
               </button>
             </div>
           </div>
@@ -59,6 +92,9 @@ const NotesListItem = ({ note, index }) => {
         <div>
           <p className="text-xs text-slate-500 font-[600]">
             Created: {decodeTimestamp(note.created).toLocaleDateString()}
+          </p>
+          <p className="text-xs text-slate-500 font-[600]">
+            Assigned to: {note.assignTitle}
           </p>
         </div>
         <div>
@@ -69,7 +105,7 @@ const NotesListItem = ({ note, index }) => {
             {note.noteText}
             <p
               ref={moreElement}
-              className={`group hover:cursor-pointer absolute flex justify-center items-center invisible bottom-0 left-0 w-full bg-gradient-to-b from-white/50 to-white/100`}
+              className={` hover:cursor-pointer absolute flex justify-center items-center invisible bottom-0 left-0 w-full bg-gradient-to-b from-white/50 to-white/100`}
               onClick={handleGetMore}
             >
               <span className="material-symbols-outlined flex justify-center items-center">

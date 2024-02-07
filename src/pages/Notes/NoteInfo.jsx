@@ -3,8 +3,6 @@ import { decodeTimestamp } from "../../helpers/decodeTimestamp";
 
 const NoteInfo = ({ note, onDelete }) => {
 
-    
-
   return (
     <section className="max-w-screen-md">
       <header className="flex flex-col gap-1">
@@ -21,7 +19,7 @@ const NoteInfo = ({ note, onDelete }) => {
         </div>
         <div className="flex flex-row gap-2">
           <p className="text-sm font-[500] text-slate-600">Created: {decodeTimestamp(note.created).toLocaleDateString()}</p>
-          <p className="text-sm font-[500] text-slate-600">Assigned to: {note.assigned}</p>
+          <p className="text-sm font-[500] text-slate-600">Assigned to: {note.assignTitle}</p>
        </div>
       </header>
       <div className="p-5 bg-slate-100 mt-2">
