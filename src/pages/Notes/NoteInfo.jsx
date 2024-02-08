@@ -25,7 +25,7 @@ const NoteInfo = ({ note, onDelete }) => {
         }) : <p>No files found</p>}
        </ul>
       </header>
-      <div className="p-5 bg-slate-100 mt-2">
+      <div className="p-5 bg-slate-100 my-2">
         <p className="whitespace-pre-wrap text-sm">{note.noteText}</p>
       </div>
     </section>

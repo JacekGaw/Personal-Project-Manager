@@ -6,12 +6,15 @@ const AddNoteFile = ({ onAddFile, note }) => {
   const fileRef = useRef();
   const { addFile, deleteFile } = useContext(NotesContext);
   const [uploadFile, setUploadFile] = useState();
+  const [disabled, setDisabled] = useState(false);
 
   const handleAddFile = async (e) => {
     e.preventDefault();
     console.log(uploadFile);
     try {
+      setDisabled(true);
       await addFile(uploadFile, note.id);
+      setDisabled(false);
     } catch (err) {
       console.log(err);
     }
@@ -22,9 +25,11 @@ const AddNoteFile = ({ onAddFile, note }) => {
 
   const handleDeleteFile = async (file) => {
     try {
+      setDisabled(true);
       await deleteFile(file, note.id);
+      setDisabled(false);
     } catch (err) { console.log(err);}
-    onAddFile();
+    
   }
 
   return (
@@ -48,7 +53,7 @@ const AddNoteFile = ({ onAddFile, note }) => {
                 >
                   {file.fileName}
                 </a>
-                <button className="material-symbols-outlined  justify-center items-center text-[16px] hidden group-hover:flex" onClick={() => handleDeleteFile(file)}>delete</button>
+                <button className="material-symbols-outlined  justify-center items-center text-[16px] hidden group-hover:flex" disabled={disabled} onClick={() => handleDeleteFile(file)}>delete</button>
               </li>
             );
           })}
@@ -59,7 +64,7 @@ const AddNoteFile = ({ onAddFile, note }) => {
           ref={fileRef}
           onChange={(e) => setUploadFile(e.target.files[0])}
         />
-        <Button type="submit">Add File</Button>
+        <Button type="submit" disabled={disabled}>Add File</Button>
       </form>
     </>
   );

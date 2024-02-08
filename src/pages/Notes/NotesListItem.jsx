@@ -57,7 +57,7 @@ const NotesListItem = ({ note, index }) => {
   return (
     <>
       <Modal ref={modalRef}>{modalOutput}</Modal>
-      <li className="relative w-full h-fit rounded-md bg-white p-5 flex flex-col justify-between drop-shadow-sm hover:drop-shadow-md transition-all duration-200 hover:-translate-y-[2px]" onClick={handleGetMore}>
+      <li className="relative group/li overflow-hidden w-full h-fit rounded-md bg-white p-5 flex flex-col justify-between drop-shadow-sm hover:drop-shadow-md transition-all duration-200 hover:-translate-y-[2px]" >
         <header className="flex justify-between items-start">
           <h3 className="text-md font-[800]">
             <span>{index}.</span> {note.title}
@@ -117,6 +117,7 @@ const NotesListItem = ({ note, index }) => {
             <p className="text-xs font-[700] text-slate-500">Files: {note.files && note.files.length}</p>
           </div>
         </div>
+        <p onClick={handleGetMore} className="absolute p-2 w-full text-xs font-[800] bg-darkjeans text-white flex justify-center top-[100%] group-hover/li:top-[86%] hover:cursor-pointer -translate-x-5 transition-all duration-200">More</p>
       </li>
     </>
   );

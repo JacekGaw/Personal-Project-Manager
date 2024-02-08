@@ -9,6 +9,7 @@ import ProjectsContextProvider from "../../store/projects-context";
 import NotesContextProvider from "../../store/notes-context";
 import ProjectView from "../Projects/ProjectView";
 import Notes from "../Notes/Notes";
+import Faq from "../FAQ/Faq";
 
 const DashboardRoutes = () => {
   return (
@@ -25,7 +26,8 @@ const DashboardRoutes = () => {
                 path="/projects/:projectIDparam"
                 element={<ProjectView />}
               />
-              <Route path="/notes/*" element={<Notes />} />
+              <Route path="/notes" element={<Notes />} />
+              <Route path="/faq" element={<Faq />} />
             </Routes>
           </div>
         </section>
