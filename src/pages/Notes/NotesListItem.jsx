@@ -51,19 +51,19 @@ const NotesListItem = ({ note, index }) => {
 
   const handleAddFile = (noteID) => {
     modalRef.current.open();
-    setModalOutput(<AddNoteFile onAddFile={handleCloseModal} noteID={noteID} />)
+    setModalOutput(<AddNoteFile onAddFile={handleCloseModal} note={note} />)
   }
 
   return (
     <>
       <Modal ref={modalRef}>{modalOutput}</Modal>
-      <li className="relative group w-full h-fit rounded-md bg-white p-5 flex flex-col justify-between drop-shadow-sm hover:drop-shadow-md transition-all duration-200">
+      <li className="relative w-full h-fit rounded-md bg-white p-5 flex flex-col justify-between drop-shadow-sm hover:drop-shadow-md transition-all duration-200 hover:-translate-y-[2px]" onClick={handleGetMore}>
         <header className="flex justify-between items-start">
           <h3 className="text-md font-[800]">
             <span>{index}.</span> {note.title}
           </h3>
           <div className="relative group p-1">
-            <span className="material-symbols-outlined flex justify-center items-center text-[18px]">
+            <span className="material-symbols-outlined  flex justify-center items-center text-[18px]">
               more_vert
             </span>
             <div className=" p-1 bg-white rounded-full absolute hidden gap-1 group-hover:flex right-[100%] top-0 ">
@@ -91,7 +91,7 @@ const NotesListItem = ({ note, index }) => {
         </header>
         <div>
           <p className="text-xs text-slate-500 font-[600]">
-            Created: {decodeTimestamp(note.created).toLocaleDateString()}
+            Created: {note.created && decodeTimestamp(note.created).toLocaleDateString()}
           </p>
           <p className="text-xs text-slate-500 font-[600]">
             Assigned to: {note.assignTitle}
@@ -105,14 +105,16 @@ const NotesListItem = ({ note, index }) => {
             {note.noteText}
             <p
               ref={moreElement}
-              className={` hover:cursor-pointer absolute flex justify-center items-center invisible bottom-0 left-0 w-full bg-gradient-to-b from-white/50 to-white/100`}
+              className={`absolute flex justify-center items-center invisible bottom-0 left-0 w-full bg-gradient-to-b from-white/50 to-white/100`}
               onClick={handleGetMore}
             >
-              <span className="material-symbols-outlined flex justify-center items-center">
+              <span className=" material-symbols-outlined flex justify-center items-center">
                 more_horiz
               </span>
-              <button className="hidden group-hover:block ">More</button>
             </p>
+          </div>
+          <div>
+            <p className="text-xs font-[700] text-slate-500">Files: {note.files && note.files.length}</p>
           </div>
         </div>
       </li>

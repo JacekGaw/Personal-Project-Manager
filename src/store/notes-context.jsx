@@ -13,7 +13,7 @@ import {
   updateDoc,
   orderBy,
 } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes, deleteObject  } from "firebase/storage";
 
 export const NotesContext = createContext({
   currentLoggedUser: {},
@@ -22,6 +22,7 @@ export const NotesContext = createContext({
   deleteNote: () => {},
   editNote: () => {},
   addFile: () => {},
+  deleteFile: () => {},
 });
 
 const NotesContextProvider = ({ children }) => {
@@ -112,6 +113,7 @@ const NotesContextProvider = ({ children }) => {
       (err) => console.log(err)
     );
   };
+
   const addFile = async (file, noteID) => {
     const fileRef = ref(storage, `notefiles/${noteID}/${file.name}`);
     let fileUrl = "";
@@ -126,7 +128,11 @@ const NotesContextProvider = ({ children }) => {
         return updateDoc(noteRef, {
           files: [
             ...notes.filter((note) => note.id === noteID)[0].files,
-            fileUrl,
+            {
+              fileURL: fileUrl,
+              fileName: file.name,
+              fileID: Math.random()
+            }
           ],
         }).then(() => {
           setNotes((prevState) => {
@@ -136,7 +142,11 @@ const NotesContextProvider = ({ children }) => {
                   ...note,
                   files: [
                     ...prevState.filter((note) => note.id === noteID)[0].files,
-                    fileUrl,
+                    {
+                      fileURL: fileUrl,
+                      fileName: file.name,
+                      fileID: Math.random()
+                    }
                   ],
                 };
               } else {
@@ -148,6 +158,35 @@ const NotesContextProvider = ({ children }) => {
       }
     }
   };
+
+  const deleteFile = async (file, noteID) => {
+    const fileRef = ref(storage, `notefiles/${noteID}/${file.fileName}`);
+    return await deleteObject(fileRef).then(() => {
+      const noteRef = doc(db, "NotesCollection", noteID);
+      let arr = notes.filter((note) => note.id === noteID)[0].files;
+      return updateDoc(noteRef, {
+        files: [
+          ...arr.filter(fileOld => fileOld.fileID !== file.fileID)
+        ]
+      });
+    }).finally(() => {
+      setNotes((prevState) => {
+        return prevState.map((note) => {
+          if (note.id === noteID) {
+            let arr = prevState.filter((note) => note.id === noteID)[0].files;
+            return {
+              ...note,
+              files: [
+                ...arr.filter(fileOld => fileOld.fileID !== file.fileID)
+              ],
+            };
+          } else {
+            return note;
+          }
+        })
+      })
+    }).catch((err) => { console.log(err) });
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -169,6 +208,7 @@ const NotesContextProvider = ({ children }) => {
     editNote: editNote,
     deleteNote: deleteNote,
     addFile: addFile,
+    deleteFile: deleteFile,
   };
 
   return (
