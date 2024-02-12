@@ -36,7 +36,8 @@ const SignUpForm = forwardRef(function SignUpForm(props, ref) {
             <label htmlFor="password-repeat" className='text-sm text-slate-500'>Repeat password:</label>
             <input type="password" id="password-repeat" className='shadow-sm border hover:border-darkjeans transition-all duration-200 border-lightjeans rounded-md p-2 text-sm text-darkjeans' ref={repeatPasswordRef} required />
             </div>
-            <p>{error}</p>
+            <p className="text-red-700 text-sm text-center font-[300]">{error}</p>
+
         </>
     )
     

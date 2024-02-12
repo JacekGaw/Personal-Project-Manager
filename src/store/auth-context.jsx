@@ -41,9 +41,6 @@ const AuthContextProvider = ({ children }) => {
           projectsIDs: [],
           avatar: userCredidencial.user.photoURL,
         });
-      })
-      .catch((error) => {
-        console.log(error);
       });
   };
 
