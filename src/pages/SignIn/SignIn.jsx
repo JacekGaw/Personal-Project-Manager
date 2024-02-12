@@ -22,7 +22,7 @@ const SignIn = () => {
       navigate("/dashboard");
     } catch (e) {
       console.log(e.message);
-      setErrorMessage("Nieprawidłowe dane logowania! Spróbuj jeszcze raz!");
+      setErrorMessage("Invalid credentails!");
     }
     loginInfo.current.clearInputs();
     setLoading(false);

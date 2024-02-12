@@ -6,14 +6,14 @@ const AccountInfo = () => {
   const { user } = useContext(AuthContext);
 
   return (
-    <section className="mx-auto max-w-[600px]  p-5 my-2 bg-white rounded-xl">
+    <section className="mx-auto  sm:max-w-[600px]  p-5 my-2 bg-white rounded-xl ">
       <header>
         <h3 className="px-2 pb-2 text-center font-[400] text-slate-700 text-lg">
           Account Info:
         </h3>
       </header>
-      <div className="w-full flex gap-2 justify-center">
-        <div className="rounded-full border-2 border-jeans">
+      <div className="w-full flex gap-2 justify-center flex-col sm:flex-row items-center">
+        <div className="rounded-full border-2 border-jeans w-fit">
           <img
             src={user.photoURL}
             alt=""

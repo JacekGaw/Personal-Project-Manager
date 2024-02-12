@@ -31,7 +31,7 @@ const Account = () => {
   };
 
   return (
-    <section className="w-full p-5">
+    <section className="w-full py-5 px-10">
       <header>
         <h1 className="p-5 text-center font-bold text-3xl">Account Settings</h1>
       </header>

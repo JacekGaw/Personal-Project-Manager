@@ -15,9 +15,9 @@ const DashboardRoutes = () => {
   return (
     <ProjectsContextProvider>
       <NotesContextProvider>
-        <section className="w-full relative flex">
+        <section className="w-full relative flex ">
           <Nav />
-          <div className="min-h-screen flex-auto ml-48">
+          <div className="min-h-screen flex-auto sm:ml-14 md:ml-48 pb-12">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/account" element={<Account />} />

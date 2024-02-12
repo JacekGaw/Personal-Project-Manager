@@ -2,89 +2,34 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../store/auth-context";
 import { NavLink } from "react-router-dom";
 import Button from "./UI/Button";
+import NavItem from "./NavItem";
 
 const Nav = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <nav className=" h-screen flex flex-col justify-between items-start fixed top-0 left-0 w-48 bg-darkerjeans">
-      <h2 className="font-bold w-full text-xl mb-10 text-center mt-2">
-        <span className="text-jeans">Per</span>
-        <span className="text-vibrantgold">Project</span>
+    <nav className="group z-50 w-full sm:h-screen flex flex-row sm:flex-col items-center transition-all duration-200 fixed bottom-0 sm:top-0 left-0 bg-darkerjeans sm:w-14 md:w-48">
+      <h2 className="hidden sm:block font-bold sm:w-full text-xl sm:mb-10 text-center sm:pt-2">
+        <span className="text-jeans hidden md:inline-flex">Per</span>
+        <span className="text-vibrantgold hidden md:inline-flex">Project</span>
+        <span className="text-jeans md:hidden">P</span>
+        <span className="text-vibrantgold md:hidden">P</span>
       </h2>
-      <ul className="h-screen flex flex-col gap-2 pl-2 text-slate-200 font-[300] w-full">
-        <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
-          <NavLink
-            exact="true"
-            to="/dashboard"
-            end
-            className={({ isActive }) =>
-              isActive
-                ? "block w-full py-2 px-2 bg-jeans rounded-l-md"
-                : "block w-full py-2 px-2"
-            }
-          >
-            Dashboard
-          </NavLink>
-        </li>
-        <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
-          <NavLink
-            exact="true"
-            end
-            to="/dashboard/account"
-            className={({ isActive }) =>
-              isActive
-                ? "block w-full py-2 px-2 bg-jeans rounded-l-md"
-                : "block w-full py-2 px-2"
-            }
-          >
-            Account
-          </NavLink>
-        </li>
-        <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
-          <NavLink
-            to="/dashboard/projects"
-            className={({ isActive }) =>
-              isActive
-                ? "block w-full py-2 px-2 bg-jeans rounded-l-md"
-                : "block w-full py-2 px-2"
-            }
-          >
-            Projects
-          </NavLink>
-        </li>
-        <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
-          <NavLink
-            to="/dashboard/notes"
-            className={({ isActive }) =>
-              isActive
-                ? "block w-full py-2 px-2 bg-jeans rounded-l-md"
-                : "block w-full py-2 px-2"
-            }
-          >
-            Notes
-          </NavLink>
-        </li>
-        <li className="hover:bg-jeans transition-all duration-200  w-full rounded-l-md">
-          <NavLink
-            to="/dashboard/faq"
-            className={({ isActive }) =>
-              isActive
-                ? "block w-full py-2 px-2 bg-jeans rounded-l-md"
-                : "block w-full py-2 px-2"
-            }
-          >
-            FAQ
-          </NavLink>
-        </li>
+      <ul className="flex sm:flex-col flex-row gap-2 sm:pl-2 text-slate-200 font-[300] w-full">
+        <NavItem linkTo={"/dashboard"} label={"Dashboard"} icon={"home"}/>
+        <NavItem linkTo={"/dashboard/account"} label={"Account"} icon={"account_circle"} />
+        <NavItem linkTo={"/dashboard/projects"} label={"Projects"} icon={"inventory_2"} />
+        <NavItem linkTo={"/dashboard/notes"} label={"Notes"} icon={"note_stack"} />
+        <NavItem linkTo={"/dashboard/faq"} label={"FAQ"} icon={"help"} />
       </ul>
-      <Button
+      <button
+        className="material-symbols-outlined sm:absolute sm:bottom-0 text-white p-2 sm:mb-1"
         onClick={() => {
           logout();
         }}
       >
-        Log Out
-      </Button>
+        logout
+      </button>
     </nav>
   );
 };
