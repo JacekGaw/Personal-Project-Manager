@@ -6,7 +6,7 @@ const ProjectsList = () => {
   const { projects, currentLoggedUser } = useContext(ProjectsContext);
 
   return (
-    <section>
+    <section className="max-w-screen-lg m-auto">
       <div className="mx-5 mt-5 border-b border-b-lightjeans py-1">
         <p className="text-xs font-[800]">{projects.length} projects found.</p>
       </div>

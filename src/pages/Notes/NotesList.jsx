@@ -8,7 +8,7 @@ const NotesList = () => {
 
   return (
     <>
-        <div className="mx-5 mt-5 border-b border-b-lightjeans py-1">
+        <div className="max-w-screen-lg m-auto  mt-5 border-b border-b-lightjeans py-1">
         <p className="text-xs font-[800]">{notes && notes.length} projects found.</p>
       </div>
       <ul className="p-5 grid w-full lg:max-w-screen-lg mx-auto gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

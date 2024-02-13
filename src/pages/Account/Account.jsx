@@ -52,10 +52,13 @@ const Account = () => {
       <UpdateAvatar />
       <UpdateNameForm />
       <ChangePasswordForm />
+      <div className="mx-auto sm:max-w-[600px] flex justify-center gap-2 my-2">
+
       <Button onClick={handleLogOut}>Log out</Button>
       <Button onClick={handleDeleteUser} className={"bg-red-600"}>
         Delete User
       </Button>
+      </div>
     </section>
   );
 };

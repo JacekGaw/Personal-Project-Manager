@@ -21,11 +21,11 @@ const ProjectViewTodosItem = ({ todo, index }) => {
       console.log(err);
     }
   };
-
+  // ${todo.status == 'urgent' && "bg-jeans text-slate-100"} ${todo.status == 'active' && "bg-lightjeans"} ${todo.status == 'done' && "bg-lightcream "}
   return (
     <li
       key={index}
-      className={`group flex justify-between my-1 bg-lightjeans p-2 rounded-sm shadow-sm ${todo.status == 'urgent' && "bg-cream"} ${todo.status == 'done' && "bg-gray-300 "}`}
+      className={`group flex justify-between p-2 rounded-sm shadow-sm bg-slate-50`}
     >
       <p className="font-[400] text-sm">
         <span className="font-[500]">{index + 1}.</span> {todo.todo}

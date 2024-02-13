@@ -37,7 +37,7 @@ const ChangePasswordForm = () => {
         </h3>
       </header>
       {errorMessage && <p className="mx-10 my-2 text-red-600 text-center text-lg border-2 border-red-600 font-[800]">{errorMessage} <button className="text-black font-[900]" onClick={() => {setErrorMessage()}}>x</button></p>}
-      <form onSubmit={handleChangePassword} className="flex flex-col gap-2 justify-center">
+      <form onSubmit={handleChangePassword} className="flex flex-col gap-2 justify-center items-center">
         <div className='flex flex-col sm:block sm:text-center'>
         <label htmlFor="new-password" className='font-[600] text-slate-700 text-sm mr-2'>
           New Password:

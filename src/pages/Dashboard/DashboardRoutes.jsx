@@ -10,6 +10,7 @@ import NotesContextProvider from "../../store/notes-context";
 import ProjectView from "../Projects/ProjectView";
 import Notes from "../Notes/Notes";
 import Faq from "../FAQ/Faq";
+import Footer from "../../components/Footer";
 
 const DashboardRoutes = () => {
   return (
@@ -17,7 +18,8 @@ const DashboardRoutes = () => {
       <NotesContextProvider>
         <section className="w-full relative flex ">
           <Nav />
-          <div className="min-h-screen flex-auto sm:ml-14 md:ml-48 pb-12">
+          <div className="min-h-screen relative flex-auto sm:ml-14 md:ml-48 pb-12">
+            
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/account" element={<Account />} />
@@ -29,6 +31,9 @@ const DashboardRoutes = () => {
               <Route path="/notes" element={<Notes />} />
               <Route path="/faq" element={<Faq />} />
             </Routes>
+            <div className="absolute w-full left-0 bottom-0 mb-10 sm:mb-0 opacity-50 sm:opacity-100">
+            <Footer />
+            </div>
           </div>
         </section>
       </NotesContextProvider>

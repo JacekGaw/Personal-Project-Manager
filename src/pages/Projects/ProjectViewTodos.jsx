@@ -59,38 +59,52 @@ const ProjectViewTodos = (todos) => {
           </Button>
         </div>
       </div>
-      <div>
-      <h5 className="text-xs text-slate-500 border-b border-b-slate-300">Urgent:</h5>
-        <ul className="w-full">
-          {todos &&
-            todos.todos.filter((todo) => todo.status === "urgent").map((todo, index) => {
-              return (
-                <ProjectViewTodosItem todo={todo} index={index} key={index} />
-              );
-            })}
+      <div className="lg:flex lg:flex-row lg:justify-between">
+      <div className="bg-jeans flex-1">
+        <h5 className="text-xs bg-white text-slate-500 border-b border-b-slate-300">
+          Urgent:
+        </h5>
+        <ul className="w-full bg-jeans flex flex-col gap-2 p-2 max-h-[500px] overflow-y-auto">
+          {todos.todos.filter((todo) => todo.status === "urgent").length > 0 ?
+            todos.todos
+              .filter((todo) => todo.status === "urgent")
+              .map((todo, index) => {
+                return (
+                  <ProjectViewTodosItem todo={todo} index={index} key={index} />
+                );
+              }) : <p className="text-xs text-white">No urgent Todos</p>}
         </ul>
       </div>
-      <div>
-      <h5 className="text-xs text-slate-500 border-b border-b-slate-300">Active:</h5>
-        <ul className="w-full">
-          {todos &&
-            todos.todos.filter((todo) => todo.status === "active").map((todo, index) => {
-              return (
-                <ProjectViewTodosItem todo={todo} index={index} key={index} />
-              );
-            })}
+      <div className="bg-lightjeans flex-1">
+        <h5 className="text-xs bg-white text-slate-500 border-b border-b-slate-300">
+          Active:
+        </h5>
+        <ul className="w-full bg-lightjeans flex flex-col gap-2 p-2 max-h-[500px] overflow-y-auto">
+          {todos.todos.filter((todo) => todo.status === "active").length > 0 ?
+            todos.todos
+              .filter((todo) => todo.status === "active")
+              .map((todo, index) => {
+                return (
+                  <ProjectViewTodosItem todo={todo} index={index} key={index} />
+                );
+              }): <p className="text-xs">No active Todos</p> }
         </ul>
       </div>
-      <div>
-        <h5 className="text-xs text-slate-500 border-b border-b-slate-300">Done:</h5>
-        <ul className="w-full">
-          {todos &&
-            todos.todos.filter((todo) => todo.status === "done").map((todo, index) => {
-              return (
-                <ProjectViewTodosItem todo={todo} index={index} key={index} />
-              );
-            })}
+      <div className="bg-cream flex-1">
+        <h5 className="text-xs bg-white text-slate-500 border-b border-b-slate-300">
+          Done:
+        </h5>
+        <ul className="w-full bg-cream flex flex-col gap-2 p-2 max-h-[500px] overflow-y-auto">
+          {todos.todos.filter((todo) => todo.status === "done").length > 0 ?
+            todos.todos
+              .filter((todo) => todo.status === "done")
+              .map((todo, index) => {
+                return (
+                  <ProjectViewTodosItem todo={todo} index={index} key={index} />
+                );
+              }):<p className="text-xs">No active Todos</p> }
         </ul>
+      </div>
       </div>
     </section>
   );

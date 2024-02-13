@@ -240,8 +240,8 @@ const ProjectView = () => {
               </div>
             </div>
           </div>
-          <div className="p-5 flex flex-col gap-2 lg:flex-row lg:justify-between">
-            <div className="w-full lg:w-1/2">
+          <div className="p-5 flex flex-col gap-2 ">
+            <div className="w-full">
               <div className="flex items-center gap-2">
                 <h3 className="font-[700] text-md text-darkjeans">
                   Project Description:
@@ -272,7 +272,7 @@ const ProjectView = () => {
                 </div>
               )}
             </div>
-            <div className="w-full lg:w-1/2">
+            <div className="w-full ">
               <h3 className="font-[700] text-md text-darkjeans">To Do:</h3>
               {project && <ProjectViewTodos todos={project.Todos} />}
             </div>

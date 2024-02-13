@@ -32,10 +32,11 @@ const ProjectNotes = ({ projectID }) => {
           <h3 className="font-[700] text-md text-darkjeans">Notes:</h3>
           <Button onClick={handleClickAddNote} className={`material-symbols-outlined text-[10px]`}>add</Button>
         </div>
-        <ul className="bg-slate-100 mt-2 p-5 grid w-full lg:max-w-screen-lg mx-auto gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {projectNotes.map((note, index) => {
+        <ul className="bg-slate-100 mt-2 p-5 grid w-full gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {projectNotes.length > 0 ?
+        projectNotes.map((note, index) => {
           return <NotesListItem note={note} index={index+1} key={note.id}/>;
-        })}
+        }): <p className="text-xs col-span-3 text-center">No notes assigned to this project</p>}
         </ul>
       </div>
     </>
