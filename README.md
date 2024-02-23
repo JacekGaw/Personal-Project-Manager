@@ -17,6 +17,17 @@ Welcome to PerProject Manager, the ultimate solution for individuals seeking sea
 - TailwindCSS
 - Google Firebase Auth and Firestore
 
-## More info:
+## Installation:
 <strong>#ALERT</strong>
 Remember that if you want to use this project you need your own API keys in src/firebase.js file!
+
+Project was created using Vite. Clone this repository using:
+<pre>git clone https://github.com/JacekGaw/Personal-Project-Manager.git</pre>
+Next step is to install packages using npm:
+<pre>npm install</pre>
+After installation go to your firebase account and create new project. It will provide API keys. You need to copy them and paste to src/firebase.js file in place of import.meta.env variables.
+Then run: 
+<pre>npm run dev</pre>
+That will create localhost server on some port. Click 'o +enter' to open in the browser.
+
+And that should be all, enjoy!
