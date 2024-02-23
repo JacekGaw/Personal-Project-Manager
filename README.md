@@ -1,8 +1,22 @@
-# React + Vite
+# Personal Project Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to PerProject Manager, the ultimate solution for individuals seeking seamless project management at their fingertips. PerProject is not just another task manager; it's your dedicated companion for turning ideas into reality and achieving your goals with efficiency and precision.
 
-Currently, two official plugins are available:
+## Functionality:
+- Creating projects with ease,
+- Personalize account adding profile photo and user name,
+- Marking Your most important projects, so you always have them listet in dashboard,
+- Adding ToDo's to Your projects and adding importance to them,
+- Setting planned end date, so You can always see if the deadline is comming,
+- Creating Notes pinned to projects or anonymous
+- Editing Notes and also adding files to them with helpful stuff
+- Easy keeping track of progress on project progress bar 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Stack: 
+- ReactJS
+- TailwindCSS
+- Google Firebase Auth and Firestore
+
+## More info:
+<strong>#ALERT</strong>
+Remember that if you want to use this project you need your own API keys in src/firebase.js file!
