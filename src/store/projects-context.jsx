@@ -35,20 +35,43 @@ const ProjectsContextProvider = ({ children }) => {
 
   const loadProjects = async (currentUser) => {
     if (currentUser !== null) {
-      console.log("Event to firebase occured");
+      console.log("Event to firebase occurred");
       const projectsFirebase = collection(db, "ProjectsCollection");
-      const q = query(
+      
+      // Query for projects where user is the author
+      const authorQuery = query(
         projectsFirebase,
         where("authorID", "==", currentUser.uid)
       );
-      const querySnapshot = await getDocs(q);
-      let arr = [];
-      if (querySnapshot) {
-        querySnapshot.forEach((doc) => {
-          // console.log(doc.id);
-          arr = [...arr, { id: doc.id, ...doc.data() }];
-        });
-      }
+  
+      // Query for projects where user is a contributor
+      const contributorQuery = query(
+        projectsFirebase,
+        where("contributorsIds", "array-contains", currentUser.uid)
+      );
+  
+      // Execute both queries
+      const [authorSnapshot, contributorSnapshot] = await Promise.all([
+        getDocs(authorQuery),
+        getDocs(contributorQuery)
+      ]);
+  
+      // Combine results, avoiding duplicates
+      const projectMap = new Map();
+  
+      authorSnapshot.forEach((doc) => {
+        projectMap.set(doc.id, { id: doc.id, ...doc.data() });
+      });
+  
+      contributorSnapshot.forEach((doc) => {
+        if (!projectMap.has(doc.id)) {
+          projectMap.set(doc.id, { id: doc.id, ...doc.data() });
+        }
+      });
+  
+      // Convert map to array
+      const arr = Array.from(projectMap.values());
+  
       setProjects(arr);
     }
   };
@@ -62,7 +85,8 @@ const ProjectsContextProvider = ({ children }) => {
       authorID: currentLoggedUser.uid,
       created: Timestamp.fromDate(new Date()),
       plannedEndDate: Timestamp.fromDate(new Date(plannedEndDate)),
-      status: "active"
+      status: "active",
+      contributorsIds: []
     };
     const newProjectRef = doc(collection(db, "ProjectsCollection"));
     return setDoc(newProjectRef, projectData).then(
