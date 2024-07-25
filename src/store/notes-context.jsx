@@ -177,6 +177,7 @@ const NotesContextProvider = ({ children }) => {
     } finally {
       if (fileUrl !== "") {
         const noteRef = doc(db, "NotesCollection", noteID);
+        // eslint-disable-next-line no-unsafe-finally
         return updateDoc(noteRef, {
           files: [
             ...notes.filter((note) => note.id === noteID)[0].files,

@@ -239,6 +239,13 @@ const ProjectView = () => {
                 </button>
               </div>
             </div>
+            <div className="flex gap-2">
+              <h3 className="font-[700] text-sm text-darkjeans">Contributors: </h3>
+              <p className="text-sm font-[300]">
+                {project && project.contributorsIds ?
+                  project.contributorsIds.length : 0}
+              </p>
+            </div>
           </div>
           <div className="p-5 flex flex-col gap-2 ">
             <div className="w-full">
