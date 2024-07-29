@@ -119,7 +119,7 @@ useEffect(() => {
                       <Button
                         onClick={() => handleAddContributor(contributor.id)}
                       >
-                        Add
+                        Added
                       </Button>
                     )}
                   </li>
@@ -127,7 +127,7 @@ useEffect(() => {
               })}
             </ul>
           ) : (
-            <p>No users found...</p>
+            <p>No users found.</p>
           )}
         </div>
       </div>
