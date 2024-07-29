@@ -10,21 +10,29 @@ const ProjectShareModal = (project) => {
   const { lookForContributors, addContributorToProject, getUserById, removeContributorFromProject } =
     useContext(ProjectsContext);
 const {user} = useContext(AuthContext);
-console.log(user);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchContributors = async () => {
-      if (project && project.project.contributorsIds) {
-        const contributors = await Promise.all(
-          project.project.contributorsIds.map(async (id) => {
-            const user = await getUserById(id);
-            return user;
-          })
-        );
-        setProjectContributors(contributors);
+      if (project.project && project.project.contributorsIds) {
+        try {
+          const contributors = await Promise.all(
+            project.project.contributorsIds.map(async (id) => {
+              if (typeof id !== 'string') {
+                console.error(`Invalid userId: ${id}. Expected a string.`);
+                return null;
+              }
+              const user = await getUserById(id);
+              return user;
+            })
+          );
+          const validContributors = contributors.filter(c => c !== null);
+          setProjectContributors(validContributors);
+        } catch (error) {
+          console.error("Error fetching contributors:", error);
+        }
       }
     };
-
+  
     fetchContributors();
   }, [project, getUserById]);
 
@@ -97,7 +105,6 @@ console.log(user);
           {contributorsList.length > 0 ? (
             <ul className=" flex flex-col gap-1 bg-slate-100">
               {contributorsList.map((contributor) => {
-                console.log(project.project.contributorsIds);
                 return (
                   <li
                     key={contributor.id}
@@ -112,7 +119,7 @@ console.log(user);
                       <Button
                         onClick={() => handleAddContributor(contributor.id)}
                       >
-                        Add
+                        Added
                       </Button>
                     )}
                   </li>
@@ -120,7 +127,7 @@ console.log(user);
               })}
             </ul>
           ) : (
-            <p>No users found...</p>
+            <p>No users found.</p>
           )}
         </div>
       </div>

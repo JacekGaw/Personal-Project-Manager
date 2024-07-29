@@ -297,12 +297,22 @@ const ProjectsContextProvider = ({ children }) => {
   };
 
   const getUserById = async (userId) => {
-    const userRef = doc(db, "users", userId);
-    const userSnap = await getDoc(userRef);
-    if (userSnap.exists()) {
-      return { id: userSnap.id, ...userSnap.data() };
-    } else {
-      return null; // or throw an error, depending on your preference
+    try {
+      if (!userId) {
+        console.error("getUserById called with null or undefined userId");
+        return null;
+      }
+      const userRef = doc(db, "users", userId);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        return { id: userSnap.id, ...userSnap.data() };
+      } else {
+        console.log(`No user found with id: ${userId}`);
+        return null;
+      }
+    } catch (error) {
+      console.error(`Error in getUserById for userId ${userId}:`, error);
+      throw error;
     }
   }
 
