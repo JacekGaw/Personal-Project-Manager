@@ -31,24 +31,76 @@ const NotesContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const loadNotes = async (currentUser) => {
-    if (currentUser !== null) {
-      console.log("Event to firebase occured");
-      const notesFirebase = collection(db, "NotesCollection");
-      const q = query(
+  if (currentUser !== null) {
+    console.log("Event to firebase occurred");
+    const notesFirebase = collection(db, "NotesCollection");
+    const projectsFirebase = collection(db, "ProjectsCollection");
+
+    // Query for notes where user is the author
+    const authorNotesQuery = query(
+      notesFirebase,
+      where("authorID", "==", currentUser.uid),
+      orderBy("created", "desc")
+    );
+    
+    // Query for projects where user is a contributor
+    const contributorProjectsQuery = query(
+      projectsFirebase,
+      where("contributorsIds", "array-contains", currentUser.uid)
+    );
+
+    try {
+      // Execute both queries
+      const [authorNotesSnapshot, contributorProjectsSnapshot] = await Promise.all([
+        getDocs(authorNotesQuery),
+        getDocs(contributorProjectsQuery)
+      ]);
+      
+      // Get project IDs where user is a contributor
+      const contributorProjectIds = contributorProjectsSnapshot.docs.map(doc => doc.id);
+
+      // Query for notes assigned to projects where user is a contributor
+      const projectNotesQuery = query(
         notesFirebase,
-        where("authorID", "==", currentUser.uid),
+        where("assign", "in", contributorProjectIds),
         orderBy("created", "desc")
       );
-      const querySnapshot = await getDocs(q);
-      let arr = [];
-      if (querySnapshot) {
-        querySnapshot.forEach((doc) => {
-          arr = [...arr, { id: doc.id, ...doc.data() }];
-        });
+
+      // Execute project notes query
+      const projectNotesSnapshot = await getDocs(projectNotesQuery);
+
+      // Combine results, avoiding duplicates
+      const notesMap = new Map();
+
+      authorNotesSnapshot.forEach((doc) => {
+        notesMap.set(doc.id, { id: doc.id, ...doc.data() });
+      });
+
+      projectNotesSnapshot.forEach((doc) => {
+        if (!notesMap.has(doc.id)) {
+          notesMap.set(doc.id, { id: doc.id, ...doc.data() });
+        }
+      });
+
+      // Convert map to array and sort by created date
+      const arr = Array.from(notesMap.values()).sort((a, b) => b.created - a.created);
+
+      setNotes(arr);
+    } catch (error) {
+      if (error.code === 'failed-precondition') {
+        console.error('This query requires an index. ', error.message);
+        // Here you could add logic to show a user-friendly message
+      } else {
+        console.error('Unexpected error: ', error);
       }
+      
+      // Fall back to only author's notes if there's an error
+      const authorNotesSnapshot = await getDocs(authorNotesQuery);
+      const arr = authorNotesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setNotes(arr);
     }
-  };
+  }
+};
 
   const addNote = (title, note, assign, assignTitle) => {
     console.log("Event to firebase occured");
@@ -125,6 +177,7 @@ const NotesContextProvider = ({ children }) => {
     } finally {
       if (fileUrl !== "") {
         const noteRef = doc(db, "NotesCollection", noteID);
+        // eslint-disable-next-line no-unsafe-finally
         return updateDoc(noteRef, {
           files: [
             ...notes.filter((note) => note.id === noteID)[0].files,

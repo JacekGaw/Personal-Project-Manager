@@ -6,17 +6,21 @@ import {
   query,
   where,
   getDocs,
+  getDoc,
   doc,
   Timestamp,
   setDoc,
   deleteDoc,
   updateDoc,
+  arrayRemove,
+  arrayUnion
 } from "firebase/firestore";
 
 export const ProjectsContext = createContext({
   currentLoggedUser: {},
   projects: [],
   loadProjects: () => {},
+  getUserById: () => {},
   addProject: () => {},
   deleteProject: () => {},
   getSingleProjectInfo: () => {},
@@ -26,6 +30,9 @@ export const ProjectsContext = createContext({
   changeDescription: () => {},
   changeEndDate: () => {},
   changeProjectStatus: () => {},
+  lookForContributors: () => {},
+  addContributorToProject: () => {},
+  removeContributorFromProject: () => {}
 });
 
 const ProjectsContextProvider = ({ children }) => {
@@ -35,20 +42,43 @@ const ProjectsContextProvider = ({ children }) => {
 
   const loadProjects = async (currentUser) => {
     if (currentUser !== null) {
-      console.log("Event to firebase occured");
+      console.log("Event to firebase occurred");
       const projectsFirebase = collection(db, "ProjectsCollection");
-      const q = query(
+
+      // Query for projects where user is the author
+      const authorQuery = query(
         projectsFirebase,
         where("authorID", "==", currentUser.uid)
       );
-      const querySnapshot = await getDocs(q);
-      let arr = [];
-      if (querySnapshot) {
-        querySnapshot.forEach((doc) => {
-          // console.log(doc.id);
-          arr = [...arr, { id: doc.id, ...doc.data() }];
-        });
-      }
+
+      // Query for projects where user is a contributor
+      const contributorQuery = query(
+        projectsFirebase,
+        where("contributorsIds", "array-contains", currentUser.uid)
+      );
+
+      // Execute both queries
+      const [authorSnapshot, contributorSnapshot] = await Promise.all([
+        getDocs(authorQuery),
+        getDocs(contributorQuery),
+      ]);
+
+      // Combine results, avoiding duplicates
+      const projectMap = new Map();
+
+      authorSnapshot.forEach((doc) => {
+        projectMap.set(doc.id, { id: doc.id, ...doc.data() });
+      });
+
+      contributorSnapshot.forEach((doc) => {
+        if (!projectMap.has(doc.id)) {
+          projectMap.set(doc.id, { id: doc.id, ...doc.data() });
+        }
+      });
+
+      // Convert map to array
+      const arr = Array.from(projectMap.values());
+
       setProjects(arr);
     }
   };
@@ -62,7 +92,8 @@ const ProjectsContextProvider = ({ children }) => {
       authorID: currentLoggedUser.uid,
       created: Timestamp.fromDate(new Date()),
       plannedEndDate: Timestamp.fromDate(new Date(plannedEndDate)),
-      status: "active"
+      status: "active",
+      contributorsIds: [],
     };
     const newProjectRef = doc(collection(db, "ProjectsCollection"));
     return setDoc(newProjectRef, projectData).then(
@@ -181,7 +212,7 @@ const ProjectsContextProvider = ({ children }) => {
         setProjects((prevState) => {
           return prevState.map((project) => {
             if (project.id === projectID)
-              return { ...project, Description: newDesc, };
+              return { ...project, Description: newDesc };
             else return project;
           });
         });
@@ -201,7 +232,10 @@ const ProjectsContextProvider = ({ children }) => {
         setProjects((prevState) => {
           return prevState.map((project) => {
             if (project.id === projectID)
-              return { ...project, plannedEndDate: Timestamp.fromDate(new Date(newDate)) };
+              return {
+                ...project,
+                plannedEndDate: Timestamp.fromDate(new Date(newDate)),
+              };
             else return project;
           });
         });
@@ -210,12 +244,12 @@ const ProjectsContextProvider = ({ children }) => {
         console.log(err);
       }
     );
-  }
+  };
 
   const changeProjectStatus = (projectID, newStatus) => {
     const projectRef = doc(db, "ProjectsCollection", projectID);
     return updateDoc(projectRef, {
-      status: newStatus
+      status: newStatus,
     }).then(
       () => {
         setProjects((prevState) => {
@@ -230,7 +264,92 @@ const ProjectsContextProvider = ({ children }) => {
         console.log(err);
       }
     );
+  };
+
+  const lookForContributors = async (contributorInfo) => {
+    if (!contributorInfo) {
+      return [];
+    }
+    const usersCollection = collection(db, "users");
+  
+    try {
+      // Create a query that checks if the email starts with the provided string
+      const q = query(
+        usersCollection,
+        where('email', '>=', contributorInfo),
+        where('email', '<=', contributorInfo + '\uf8ff')
+      );
+  
+      // Execute the query
+      const querySnapshot = await getDocs(q);
+  
+      // Map the results to an array of user objects
+      const users = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+  
+      return users;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const getUserById = async (userId) => {
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      return { id: userSnap.id, ...userSnap.data() };
+    } else {
+      return null; // or throw an error, depending on your preference
+    }
   }
+
+  const addContributorToProject = (projectId, userId) => {
+    console.log(projectId, userId);
+    const projectRef = doc(db, "ProjectsCollection", projectId);
+    return updateDoc(projectRef, {
+      contributorsIds: arrayUnion(userId),
+    }).then(
+      () => {
+        setProjects((prevState) => {
+          return prevState.map((project) => {
+            if (project.id === projectId){
+              const newContributorsArr = [...project.contributorsIds, userId];
+              return { ...project, contributorsIds: newContributorsArr };
+            }
+            else return project;
+          });
+        });
+      },
+      (err) => {
+        console.log(err);
+      }
+    )
+  }
+
+  const removeContributorFromProject = async (projectId, userId) => {
+    const projectRef = doc(db, "ProjectsCollection", projectId);
+    try {
+      await updateDoc(projectRef, {
+        contributorsIds: arrayRemove(userId),
+      });
+      
+      setProjects((prevState) => 
+        prevState.map((project) => 
+          project.id === projectId
+            ? { ...project, contributorsIds: project.contributorsIds.filter(id => id !== userId) }
+            : project
+        )
+      );
+      
+      return true; // Indicate success
+    } catch (err) {
+      console.error(err);
+      return false; // Indicate failure
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -249,6 +368,7 @@ const ProjectsContextProvider = ({ children }) => {
     currentLoggedUser: currentLoggedUser,
     projects: projects,
     loadProjects: loadProjects,
+    getUserById: getUserById,
     addProject: addProject,
     deleteProject: deleteProject,
     getSingleProjectInfo: getSingleProjectInfo,
@@ -258,6 +378,9 @@ const ProjectsContextProvider = ({ children }) => {
     changeDescription: changeDescription,
     changeEndDate: changeEndDate,
     changeProjectStatus: changeProjectStatus,
+    lookForContributors: lookForContributors,
+    addContributorToProject: addContributorToProject,
+    removeContributorFromProject: removeContributorFromProject
   };
 
   return (
