@@ -9,10 +9,12 @@ import { countDaysLeft } from "../../helpers/countDaysLeft";
 import Modal from "../../components/UI/Modal";
 import { useNavigate } from "react-router-dom";
 import ProjectNotes from "./ProjectNotes";
+import ProjectShareModal from "./ProjectShareModal";
 
 const ProjectView = () => {
   const navigate = useNavigate();
   const modalRef = useRef();
+  const shareModalRef = useRef();
   const newDescRef = useRef();
   const newPlannedEndDateRef = useRef();
   const { projectIDparam } = useParams();
@@ -99,6 +101,10 @@ const ProjectView = () => {
     setDisabled(false);
   };
 
+  const handleShareProject = () => {
+    shareModalRef.current.open();
+  }
+
   return (
     <>
       <Modal ref={modalRef}>
@@ -122,6 +128,9 @@ const ProjectView = () => {
           </Button>
         </div>
       </Modal>
+      <Modal ref={shareModalRef}>
+        <ProjectShareModal project={project} />
+      </Modal>
       <section className="w-full  p-5">
         <header className="w-full relative">
           <Link
@@ -143,6 +152,18 @@ const ProjectView = () => {
                 >
                   <span className="material-symbols-outlined text-[20px] hover:-translate-y-[2px] transition-all duration-200">
                     check_circle
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className="flex items-center justify-center"
+                  onClick={() =>
+                    handleShareProject()
+                  }
+                >
+                  <span className="material-symbols-outlined text-[20px] hover:-translate-y-[2px] transition-all duration-200">
+                    share
                   </span>
                 </button>
               </li>

@@ -46,8 +46,7 @@ const AuthContextProvider = ({ children }) => {
 
   const signIn = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
-    console.log("Event to firebase occured");
-  };
+    };
 
   const logout = () => {
     console.log("Event to firebase occured");
